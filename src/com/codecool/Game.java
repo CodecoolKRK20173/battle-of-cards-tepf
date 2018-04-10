@@ -25,14 +25,14 @@ public class Game extends Pane {
     private List<Player> players = new ArrayList<>();
     private List<Pile> tableauPiles = FXCollections.observableArrayList();
     private List<Pile> playersPiles = FXCollections.observableArrayList();
-    private static double TABLEAU_GAP = 30;
-    private static double PLAYER_GAP = 1;
+    private static double GAP = 1;
 
     public Game(List<Player> players) {
         this.players = players;
         this.deck = createNewDeck();
         initPiles();
         dealCards();
+        players.get(0).activate();
     }
 
     public void setTableBackground(Image tableBackground) {
@@ -71,9 +71,8 @@ public class Game extends Pane {
         Pile containingPile = card.getContainingPile();
         if (containingPile.getPileType().equals(Pile.PileType.HAND)){
             Player owner = containingPile.getOwner();
-            if (owner.isActivePlayer()){
+            if (owner.isActivePlayer() && card.isFaceDown()){
                 card.flip();
-                card.setMouseTransparent(false);
                 System.out.println(card + " revealed.");
             }
         }
@@ -96,7 +95,7 @@ public class Game extends Pane {
     private void initPiles() {
         
         for (int i = 0; i < players.size(); i++) {
-            Pile tableauPile = new Pile(Pile.PileType.TABLEAU, "Tableau " + i, TABLEAU_GAP);
+            Pile tableauPile = new Pile(Pile.PileType.TABLEAU, "Tableau " + i, GAP);
             tableauPile.setBlurredBackground();
             tableauPile.setLayoutX(300 + i * 180);
             tableauPile.setLayoutY(275);
@@ -109,7 +108,7 @@ public class Game extends Pane {
         double[] pilesLayoutsY = {510, players.size() == 2 ? 20 : 275, 20, 275};
 
         for(Player player : players){
-            Pile playersPile = new Pile(Pile.PileType.HAND, "Player " + i, PLAYER_GAP);
+            Pile playersPile = new Pile(Pile.PileType.HAND, "Player " + i, GAP);
             playersPile.setBlurredBackground();
             playersPile.setLayoutX(pilesLayoutsX[i]);
             playersPile.setLayoutY(pilesLayoutsY[i]);
@@ -127,6 +126,7 @@ public class Game extends Pane {
         while(deckIterator.hasNext()){
             for(Pile destPile : playersPiles){
                 Card card = deckIterator.next();
+                addMouseEventHandlers(card);
                 destPile.addCard(card);
                 getChildren().add(card);
                 if(!deckIterator.hasNext()){
@@ -147,6 +147,8 @@ public class Game extends Pane {
             result.add(new Card(cardName, Status.FACEDOWN, row));
             i++;
         }
+
+        Collections.shuffle(result);
 
         return result;
     }

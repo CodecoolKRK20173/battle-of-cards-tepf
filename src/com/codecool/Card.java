@@ -17,7 +17,7 @@ public class Card extends ImageView {
     private int arm;
     private int hp;
 
-    private boolean faceDown;
+    // private boolean faceDown;
     
     private Status state;
 
@@ -39,12 +39,12 @@ public class Card extends ImageView {
         this.dmg = stats.get(1);
         this.arm = stats.get(2);
         this.hp = stats.get(3);        
-
-        this.faceDown = state.getCardSide();
+        this.state = state;
+        // this.faceDown = state.getCardSide();
         this.dropShadow = new DropShadow(2, Color.gray(0, 0.75));
         backFace = cardBackImage;
         frontFace = cardFaceImages.get(getShortName());
-        setImage(faceDown ? backFace : frontFace);
+        setImage(state.getCardSide() ? backFace : frontFace);
         setEffect(dropShadow);
     }
     
@@ -56,12 +56,12 @@ public class Card extends ImageView {
 
     public void setBackFace() {
         backFace = new Image("/card_images/card_back.png");
-        setImage(faceDown ? backFace : frontFace);
+        setImage(state.getCardSide() ? backFace : frontFace);
     }
 
     public void setFrontFace(Image newFrontFace) {
         frontFace = newFrontFace;
-        setImage(faceDown ? backFace : frontFace);
+        setImage(state.getCardSide() ? backFace : frontFace);
     }
 
     public Image getFrontFace() {
@@ -85,7 +85,7 @@ public class Card extends ImageView {
     }
 
     public boolean isFaceDown() {
-        return faceDown;
+        return state.getCardSide();
     }
 
     public String getShortName() {
@@ -115,7 +115,7 @@ public class Card extends ImageView {
         }else {
             this.state = Status.FACEDOWN;
         }
-        setImage(faceDown ? backFace : frontFace);
+        setImage(this.state.getCardSide() ? backFace : frontFace);
     }
 
     @Override
