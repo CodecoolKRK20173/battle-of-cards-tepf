@@ -40,11 +40,8 @@ public class Game extends Pane {
         this.deck = createNewDeck();
         initPiles();
         dealCards();
-<<<<<<< HEAD
-        players.get(0).activate();
-=======
         initButtons();
->>>>>>> CardButtons
+        players.get(0).activate();
     }
 
     public void setTableBackground(Image tableBackground) {

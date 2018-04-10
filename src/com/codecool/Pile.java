@@ -18,6 +18,7 @@ public class Pile extends Pane {
     private String name;
     private double cardGap;
     private ObservableList<Card> cards = FXCollections.observableArrayList();
+    private ImageHandler imageHandler = new ImageHandler();
 
     public Pile(PileType pileType, String name, double cardGap) {
         this.pileType = pileType;
@@ -85,7 +86,7 @@ public class Pile extends Pane {
     }
 
     public void setBlurredBackground() {
-        setPrefSize(Card.WIDTH, Card.HEIGHT);
+        setPrefSize(imageHandler.getWidth(), imageHandler.getHeight());
         BackgroundFill backgroundFill = new BackgroundFill(Color.gray(0.0, 0.2), null, null);
         Background background = new Background(backgroundFill);
         GaussianBlur gaussianBlur = new GaussianBlur(10);
