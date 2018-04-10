@@ -53,6 +53,16 @@ public class Main extends Application{
                     players.add(new ComputerPlayer());
                 }
             }
+
+            if (players.size() > 1){
+                stage.setTitle("Battlecards");
+                stage.setScene(getGameScene());
+                stage.show();
+                System.out.println("Started new game with " + players.size() + " players");
+            }
+            else{
+                System.out.println("Add more players!");
+            }
         });
 
         menu.setBackground(new Image("/table/green.png"));
