@@ -37,6 +37,20 @@ public class Main extends Application{
             choiceBoxes.add(createNewChoiceBox(500, 300 + i*30));
         }
 
+        Button startButton = createNewButton("Start game", 500, 450);
+
+        startButton.setOnAction(e -> {
+
+            for (ChoiceBox choiceBox : choiceBoxes){                
+                if(choiceBox.getValue().equals("Human player")){
+                    players.add(new HumanPlayer());
+                }
+                else if(choiceBox.getValue().equals("Computer player")){
+                    players.add(new ComputerPlayer());
+                }
+            }
+        });
+
         menu.setBackground(new Image("/table/green.png"));
     }
 
