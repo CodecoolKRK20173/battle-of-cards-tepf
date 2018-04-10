@@ -1,3 +1,5 @@
+package com.codecool;
+
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -120,7 +122,7 @@ public class Card extends ImageView {
     //     return card1.getSuit() == card2.getSuit();
     // }
 
-    public static List<Card> createNewDeck() {
+    public List<Card> createNewDeck() {
         List<Card> result = new ArrayList<>();
   
         for (int i = 0; i < 30; i++) {
