@@ -140,12 +140,14 @@ public class Game extends Pane {
         HandleFile readFile = new HandleFile("test.txt");
         List<ArrayList<Integer>> statsCollection = readFile.getStatsList();
         List<Card> result = new ArrayList<>();
-        int i = 0;
+        int i = 1;
   
         for (ArrayList<Integer> row: statsCollection) {
-            String cardName = "Card" + i;
+            String cardName = String.valueOf(i);
             result.add(new Card(cardName, Status.FACEDOWN, row));
+            i++;
         }
+
         return result;
     }
 

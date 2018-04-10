@@ -29,6 +29,7 @@ public class Main extends Application{
     }
 
     public void start(Stage stage){
+        Card.loadCardImages();
         setMenuScene(stage);
     }
 
