@@ -50,4 +50,16 @@ public class Game extends Pane {
         return false;
     }
 
+    private int getLostPlayersNumber(){
+        int lostPlayers = 0;
+
+        for(Player player : players){
+            if (player.getStatus().equals(Player.Status.LOST)){
+                lostPlayers++;
+            }
+        }
+
+        return lostPlayers;
+    }
+
 }
