@@ -22,7 +22,7 @@ public class Card extends ImageView {
     private Image backFace;
     private Image frontFace;
     
-    // private Pile containingPile;
+    private Pile containingPile;
     private DropShadow dropShadow;
     
     static Image cardBackImage;
@@ -94,18 +94,18 @@ public class Card extends ImageView {
         return dropShadow;
     }
 
-    // public Pile getContainingPile() {
-    //     return containingPile;
-    // }
+    public Pile getContainingPile() {
+        return containingPile;
+    }
 
-    // public void setContainingPile(Pile containingPile) {
-    //     this.containingPile = containingPile;
-    // }
+    public void setContainingPile(Pile containingPile) {
+        this.containingPile = containingPile;
+    }
 
-    // public void moveToPile(Pile destPile) {
-    //     this.getContainingPile().getCards().remove(this);
-    //     destPile.addCard(this);
-    // }
+    public void moveToPile(Pile destPile) {
+        this.getContainingPile().getCards().remove(this);
+        destPile.addCard(this);
+    }
 
     public void flip() {
         if(this.state == Status.FACEDOWN) {
@@ -130,41 +130,14 @@ public class Card extends ImageView {
     //     return card1.getSuit() == card2.getSuit();
     // }
 
-    public List<Card> createNewDeck(ArrayList<ArrayList<Integer>> statsCollection) {
-        List<Card> result = new ArrayList<>();
-        int i = 0;
-  
-        for (ArrayList<Integer> row: statsCollection) {
-            String cardName = "Card" + i;
-            result.add(new Card(cardName, Status.FACEDOWN, row));
-        }
-        return result;
-    }
-
-    public void loadCardImages() {
+    public void loadCardImages() 
         cardBackImage = new Image("?");
         int numberOfCards = 30;
         
         for (int i = 0; i < numberOfCards; i++) {
-            String cardName = "Card" + i;
-            String imageFileName = "card_images/" + cardName + ".png";
+            String imageFileName = "/cardimages/tanks" + i + ".jpeg";
 
             cardFaceImages.put(cardName, new Image(imageFileName));
         }
-    }
-    
-    public enum Status {
-        FACEDOWN(false),
-        FACEUP(true);
-        
-        private boolean isFrontFace;
-    
-        private Status(boolean isFrontFace) {
-            this.isFrontFace = isFrontFace;
-        }
-    
-        public boolean getCardSide() {
-            return this.isFrontFace;
-        }
-    }
+    }   
 }
