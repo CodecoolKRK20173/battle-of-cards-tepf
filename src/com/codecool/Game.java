@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -28,11 +29,19 @@ public class Game extends Pane {
     private static double TABLEAU_GAP = 30;
     private static double PLAYER_GAP = 1;
 
+    private Button spdButton = new Button();
+    private Button dmgButton = new Button();
+    private Button armButton = new Button();
+    private Button hpButton = new Button();
+
+    private ArrayList<Button> buttonList = new ArrayList<Button>(4);
+
     public Game(List<Player> players) {
         this.players = players;
         this.deck = createNewDeck();
         initPiles();
         dealCards();
+        initButtons();
     }
 
     public void setTableBackground(Image tableBackground) {
@@ -171,8 +180,50 @@ public class Game extends Pane {
     });
     }
 
-    // private void initButtonOverCard(){
+    private void setButtonParameters(Button btn, int x, int y){
+        btn.setLayoutX(x);
+        btn.setLayoutY(y);
+        setButtonSize(btn,20,20);
+        makeButtonBorderGlow(btn);
+    }
 
-    // }
+    private void initButtons(){
+        spdButton.setOnMouseClicked(spdButtonHandler);
+        buttonList.add(spdButton);
+
+        dmgButton.setOnMouseClicked(dmgButtonHandler);
+        buttonList.add(dmgButton);
+
+        armButton.setOnMouseClicked(armButtonHandler);
+        buttonList.add(armButton);
+
+        hpButton.setOnMouseClicked(hpButtonHandler);
+        buttonList.add(hpButton);
+
+        int x = 400;
+        int y = 300;
+        for (Button btn : buttonList) {
+            setButtonParameters(btn, x, y);
+            x += 150;
+        }
+
+        getChildren().addAll(buttonList);
+    }
+
+    private EventHandler<MouseEvent> spdButtonHandler = e -> {
+        System.out.println("Add spd comparator");
+    };
     
+    private EventHandler<MouseEvent> dmgButtonHandler = e -> {
+        System.out.println("Add dmg comparator");
+    };
+
+    private EventHandler<MouseEvent> armButtonHandler = e -> {
+        System.out.println("Add arm comparator");
+    };
+
+    private EventHandler<MouseEvent> hpButtonHandler = e -> {
+        System.out.println("Add hp comparator");
+    };
+
 }
