@@ -30,7 +30,7 @@ public class Game extends Pane {
 
     public Game(List<Player> players) {
         this.players = players;
-        this.deck = Card.createNewDeck();
+        this.deck = createNewDeck();
         initPiles();
         dealCards();
     }
@@ -135,4 +135,19 @@ public class Game extends Pane {
             }
         }
     }
+
+    public List<Card> createNewDeck() {
+        HandleFile readFile = new HandleFile("test.txt");
+        List<ArrayList<Integer>> statsCollection = readFile.getStatsList();
+        List<Card> result = new ArrayList<>();
+        int i = 0;
+  
+        for (ArrayList<Integer> row: statsCollection) {
+            String cardName = "Card" + i;
+            result.add(new Card(cardName, Status.FACEDOWN, row));
+        }
+        return result;
+    }
+
+    
 }

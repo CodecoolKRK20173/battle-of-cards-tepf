@@ -46,7 +46,7 @@ public class HandleFile{
         return integerRow;
     }
 
-    public ArrayList<ArrayList<Integer>> getStatsList() {
+    public List<ArrayList<Integer>> getStatsList() {
         return this.cardsList;
     }
 }
