@@ -28,4 +28,11 @@ public class Game extends Pane {
     private static double TABLEAU_GAP = 30;
     private static double PLAYER_GAP = 1;
 
+    public Game(List<Player> players) {
+        this.players = players;
+        this.deck = Card.createNewDeck();
+        initPiles();
+        dealCards();
+    }
+
 }
