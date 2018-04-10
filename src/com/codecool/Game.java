@@ -79,4 +79,18 @@ public class Game extends Pane {
         }
     };
 
+    private void handleBattle(Card card, Pile destPile) {
+        List<Card> cardsToCompare = new ArrayList<>();
+        
+        for(Player player : players){
+            if (!player.getHand().isEmpty()){
+                cardsToCompare.add(player.getHand().getTopCard());
+            }
+        }
+
+        if(isGameOver()){
+            System.out.println("Game ended");
+        }
+    }
+
 }
