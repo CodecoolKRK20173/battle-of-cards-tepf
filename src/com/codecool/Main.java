@@ -105,4 +105,9 @@ public class Main extends Application{
     private void setButtonTransparent(Button btn){
         btn.setStyle("-fx-background-color: transparent;");
     }
+
+    private void setButtonSize(Button btn, double x, double y){
+        btn.setMaxSize(x, y);
+        btn.setMinSize(x, y);
+    }
 }
