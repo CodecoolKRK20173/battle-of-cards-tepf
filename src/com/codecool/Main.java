@@ -121,4 +121,12 @@ public class Main extends Application{
             }
     });
     }
+
+    // private void initButtonsOverCard(){
+    //     for (int i=0; i<4; i++){
+    //         spdButton = createNewButton("", x, y);
+
+    //     }
+    // }
+
 }
