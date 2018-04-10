@@ -48,4 +48,13 @@ public class Main extends Application{
 
         return choiceBox;
     }
+
+    private Button createNewButton(String label, double x, double y){
+        Button btn = new Button();
+        btn.setText(label);
+        btn.setLayoutX(x);
+        btn.setLayoutY(y);
+    
+        return btn;
+    }
 }
