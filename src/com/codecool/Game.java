@@ -21,5 +21,11 @@ import java.util.Arrays;
 import java.util.Collections;
 
 public class Game extends Pane {
+    private List<Card> deck = new ArrayList<>();
+    private List<Player> players = new ArrayList<>();
+    private List<Pile> tableauPiles = FXCollections.observableArrayList();
+    private List<Pile> playersPiles = FXCollections.observableArrayList();
+    private static double TABLEAU_GAP = 30;
+    private static double PLAYER_GAP = 1;
 
 }
