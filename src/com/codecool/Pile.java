@@ -21,10 +21,10 @@ public class Pile extends Pane {
 
     public Pile(PileType pileType, String name, double cardGap) {
         this.pileType = pileType;
+        this.owner = null;
         this.cardGap = cardGap;
         this.name = name;
     }
-
 
     public Pile(PileType pileType, Player owner, String name, double cardGap) {
         this.pileType = pileType;
@@ -97,9 +97,7 @@ public class Pile extends Pane {
     }
 
     public enum PileType {
-        STOCK,
-        DISCARD,
-        FOUNDATION,
+        HAND,
         TABLEAU
     }
 }
