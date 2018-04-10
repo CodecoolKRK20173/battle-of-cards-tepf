@@ -26,13 +26,6 @@ public class Pile extends Pane {
         this.name = name;
     }
 
-    public Pile(PileType pileType, Player owner, String name, double cardGap) {
-        this.pileType = pileType;
-        this.owner = owner;
-        this.cardGap = cardGap;
-        this.name = name;
-    }
-
     public PileType getPileType() {
         return pileType;
     }
@@ -51,6 +44,10 @@ public class Pile extends Pane {
 
     public ObservableList<Card> getCards() {
         return cards;
+    }
+
+    public void setOwner(Player owner) {
+        this.owner = owner;
     }
 
     public int numOfCards() {
