@@ -20,6 +20,8 @@ import java.awt.Toolkit;
 
 public class Main extends Application{
 
+    List<Player> players = new ArrayList<>();
+
     public static void main(String[] args){
         launch(args);
     }
