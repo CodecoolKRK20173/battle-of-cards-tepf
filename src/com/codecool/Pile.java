@@ -1,4 +1,4 @@
-package com.codecool.klondike;
+package com.codecool;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
