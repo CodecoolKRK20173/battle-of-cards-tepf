@@ -62,4 +62,21 @@ public class Game extends Pane {
         return lostPlayers;
     }
 
+    public void addMouseEventHandlers(Card card) {
+        card.setOnMouseClicked(onMouseClickedHandler);
+    }
+
+    private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
+        Card card = (Card) e.getSource();
+        Pile containingPile = card.getContainingPile();
+        if (containingPile.getPileType().equals(Pile.PileType.HAND)){
+            Player owner = containingPile.getOwner();
+            if (owner.isActivePlayer()){
+                card.flip();
+                card.setMouseTransparent(false);
+                System.out.println(card + " revealed.");
+            }
+        }
+    };
+
 }
