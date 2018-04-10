@@ -22,7 +22,7 @@ public class Card extends ImageView {
     private Image backFace;
     private Image frontFace;
     
-    private Pile containingPile;
+    // private Pile containingPile;
     private DropShadow dropShadow;
     
     static Image cardBackImage;
@@ -153,23 +153,6 @@ public class Card extends ImageView {
         }
     }
     
-    // public enum Suit {
-    //     HEARTS("red"),
-    //     DIAMONDS("red"),
-    //     SPADES("black"),
-    //     CLUBS("black");
-    
-    //     private String color;
-    
-    //     private Suit(String color) {
-    //         this.color = color;
-    //     }
-    
-    //     public String getColor() {
-    //         return this.color;
-    //     }
-    // }
-
     public enum Status {
         FACEDOWN(false),
         FACEUP(true);
