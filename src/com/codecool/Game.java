@@ -93,4 +93,31 @@ public class Game extends Pane {
         }
     }
 
+    private void initPiles() {
+        
+        for (int i = 0; i < players.size(); i++) {
+            Pile tableauPile = new Pile(Pile.PileType.TABLEAU, "Tableau " + i, TABLEAU_GAP);
+            tableauPile.setBlurredBackground();
+            tableauPile.setLayoutX(300 + i * 180);
+            tableauPile.setLayoutY(275);
+            tableauPiles.add(tableauPile);
+            getChildren().add(tableauPile);
+        }
+
+        int i = 0;
+        double[] pilesLayoutsX = {550, players.size() == 2 ? 550 : 20, 550, 1100};
+        double[] pilesLayoutsY = {510, players.size() == 2 ? 20 : 275, 20, 275};
+
+        for(Player player : players){
+            Pile playersPile = new Pile(Pile.PileType.HAND, "Player " + i, PLAYER_GAP);
+            playersPile.setBlurredBackground();
+            playersPile.setLayoutX(pilesLayoutsX[i]);
+            playersPile.setLayoutY(pilesLayoutsY[i]);
+            playersPiles.add(playersPile);
+            getChildren().add(playersPile);
+            player.setHand(playersPile);
+            i++;
+        }
+    }
+
 }
