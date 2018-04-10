@@ -41,4 +41,13 @@ public class Game extends Pane {
                 BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
     }
 
+    public boolean isGameOver() {
+        
+        if(getLostPlayersNumber() == players.size() - 1){
+            return true;
+        }
+
+        return false;
+    }
+
 }
