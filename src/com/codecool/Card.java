@@ -130,8 +130,7 @@ public class Card extends ImageView {
         
         for (int i = 1; i <= numberOfCards; i++) {
             String imageFileName = "/card_images/tanks/" + i + ".jpeg";
-
-            cardFaceImages.put(String.valueOf(i), new Image(imageFileName));
+            cardFaceImages.put(String.valueOf(i), new Image(imageFileName, WIDTH, HEIGHT, false, false));
         }
     }   
 }
