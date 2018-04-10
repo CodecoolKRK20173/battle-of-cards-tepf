@@ -29,7 +29,7 @@ public class Main extends Application{
     }
 
     public void start(Stage stage){
-
+        setMenuScene(stage);
     }
 
     private void setMenuScene(Stage stage){
@@ -46,11 +46,13 @@ public class Main extends Application{
         startButton.setOnAction(e -> {
 
             for (ChoiceBox choiceBox : choiceBoxes){                
-                if(choiceBox.getValue().equals("Human player")){
-                    players.add(new HumanPlayer());
-                }
-                else if(choiceBox.getValue().equals("Computer player")){
-                    players.add(new ComputerPlayer());
+                if(choiceBox.getValue() != null){
+                    if(choiceBox.getValue().equals("Human player")){
+                        players.add(new HumanPlayer());
+                    }
+                    else if(choiceBox.getValue().equals("Computer player")){
+                        players.add(new ComputerPlayer());
+                    }
                 }
             }
 
