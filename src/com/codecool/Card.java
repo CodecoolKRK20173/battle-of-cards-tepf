@@ -10,10 +10,12 @@ import java.util.*;
 public class Card extends ImageView {
 
     private String name;
-    private int mp;
-    private int dmg;
-    private int dex;
     private int spd;
+    private int dmg;
+    private int arm;
+    private int hp;
+
+    private boolean faceDown;
     
     private Status state;
 
@@ -28,12 +30,13 @@ public class Card extends ImageView {
     public static final int WIDTH = 150;
     public static final int HEIGHT = 215;
     
-    public Card(String name, Status state, int mp, int dmg, int dex, int spd) {
+    public Card(String name, Status state, ArrayList<Integer> stats) {
         this.name = name;
-        this.mp = mp;
-        this.dmg = dmg;
-        this.dex = dex;
-        this.spd = spd;        
+
+        this.spd = stats.get(0);
+        this.dmg = stats.get(1);
+        this.arm = stats.get(2);
+        this.hp = stats.get(3);        
 
         this.faceDown = faceDown;
         this.dropShadow = new DropShadow(2, Color.gray(0, 0.75));
@@ -44,13 +47,10 @@ public class Card extends ImageView {
     }
     
     public Integer[] getStatsArray() {
-        int[] statsArray = {this.mp, this.dmg, this.dex, this.spd};
+        Integer[] statsArray = {this.spd, this.dmg, this.arm, this.hp};
 
         return statsArray;
-    } 
-    // Card(Card c) {
-    //     this(c.getSuit(), c.getRank(), c.isFaceDown());
-    // }
+    }
 
     public void setBackFace() {
         backFace = new Image("?");
@@ -66,12 +66,20 @@ public class Card extends ImageView {
         return frontFace;
     }
 
-    public Suit getSuit() {
-        return suit;
+    public int getSpd() {
+        return this.spd;
     }
 
-    public Rank getRank() {
-        return rank;
+    public int getDmg() {
+        return this.dmg;
+    }
+
+    public int getArm() {
+        return this.arm;
+    }
+
+    public int getHp() {
+        return this.hp;
     }
 
     public boolean isFaceDown() {
@@ -100,7 +108,7 @@ public class Card extends ImageView {
     // }
 
     public void flip() {
-        if(this.state = Status.FACEDOWN) {
+        if(this.state == Status.FACEDOWN) {
             this.state = Status.FACEUP;
         }else {
             this.state = Status.FACEDOWN;
@@ -110,8 +118,8 @@ public class Card extends ImageView {
 
     @Override
     public String toString() {
-        return "Card name: " + this.name + "mp: " + this.mp + "dmg: " + this.dmg + "dex: " 
-                             + this.dex + "spd: " + this.spd;
+        return "Card name: " + this.name + "spd: " + this.spd + "dmg: " + this.dmg + "arm: " 
+                             + this.arm + "hp: " + this.hp;
     }
 
     // public static boolean isOppositeColor(Card card1, Card card2) {
@@ -122,12 +130,13 @@ public class Card extends ImageView {
     //     return card1.getSuit() == card2.getSuit();
     // }
 
-    public List<Card> createNewDeck() {
+    public List<Card> createNewDeck(ArrayList<ArrayList<Integer>> statsCollection) {
         List<Card> result = new ArrayList<>();
+        int i = 0;
   
-        for (int i = 0; i < 30; i++) {
+        for (ArrayList<Integer> row: statsCollection) {
             String cardName = "Card" + i;
-            result.add(new Card(cardName, Status.FACEDOWN, true));
+            result.add(new Card(cardName, Status.FACEDOWN, row));
         }
         return result;
     }
@@ -165,14 +174,14 @@ public class Card extends ImageView {
         FACEDOWN(false),
         FACEUP(true);
         
-        private int cardSide;
+        private boolean isFrontFace;
     
-        private Rank(int cardSide) {
-            this.cardSide = cardStrength;
+        private Status(boolean isFrontFace) {
+            this.isFrontFace = isFrontFace;
         }
     
-        public int getCardSide() {
-            return this.cardSide;
+        public boolean getCardSide() {
+            return this.isFrontFace;
         }
     }
 }
