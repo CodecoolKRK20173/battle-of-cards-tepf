@@ -7,6 +7,8 @@ import javafx.scene.paint.Color;
 
 import java.util.*;
 
+import com.codecool.Status;
+
 public class Card extends ImageView {
 
     private String name;
@@ -38,7 +40,7 @@ public class Card extends ImageView {
         this.arm = stats.get(2);
         this.hp = stats.get(3);        
 
-        this.faceDown = faceDown;
+        this.faceDown = state.getCardSide();
         this.dropShadow = new DropShadow(2, Color.gray(0, 0.75));
         backFace = cardBackImage;
         frontFace = cardFaceImages.get(getShortName());
@@ -122,22 +124,14 @@ public class Card extends ImageView {
                              + this.arm + "hp: " + this.hp;
     }
 
-    // public static boolean isOppositeColor(Card card1, Card card2) {
-    //     return !card1.getSuit().getColor().equals(card2.getSuit().getColor()); 
-    // }
-
-    // public static boolean isSameSuit(Card card1, Card card2) {
-    //     return card1.getSuit() == card2.getSuit();
-    // }
-
-    public void loadCardImages(){
-        cardBackImage = new Image("card_images/card_back.png");
-        int numberOfCards = 30;
+    public static void loadCardImages(){
+        cardBackImage = new Image("/card_images/card_back.png");
+        int numberOfCards = 28;
         
         for (int i = 1; i <= numberOfCards; i++) {
-            String imageFileName = "/card_images/tanks" + i + ".jpeg";
+            String imageFileName = "/card_images/tanks/" + i + ".jpeg";
 
-            cardFaceImages.put(cardName, new Image(imageFileName));
+            cardFaceImages.put(String.valueOf(i), new Image(imageFileName));
         }
     }   
 }

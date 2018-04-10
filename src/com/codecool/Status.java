@@ -1,8 +1,8 @@
 package com.codecool;
 
 public enum Status {
-    FACEDOWN(false),
-    FACEUP(true);
+    FACEDOWN(true),
+    FACEUP(false);
     
     private boolean isFrontFace;
 
