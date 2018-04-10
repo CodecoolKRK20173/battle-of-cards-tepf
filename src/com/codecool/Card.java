@@ -53,7 +53,7 @@ public class Card extends ImageView {
     }
 
     public void setBackFace() {
-        backFace = new Image("?");
+        backFace = new Image("/card_images/card_back.png");
         setImage(faceDown ? backFace : frontFace);
     }
 
@@ -130,12 +130,12 @@ public class Card extends ImageView {
     //     return card1.getSuit() == card2.getSuit();
     // }
 
-    public void loadCardImages() 
-        cardBackImage = new Image("?");
+    public void loadCardImages(){
+        cardBackImage = new Image("card_images/card_back.png");
         int numberOfCards = 30;
         
-        for (int i = 0; i < numberOfCards; i++) {
-            String imageFileName = "/cardimages/tanks" + i + ".jpeg";
+        for (int i = 1; i <= numberOfCards; i++) {
+            String imageFileName = "/card_images/tanks" + i + ".jpeg";
 
             cardFaceImages.put(cardName, new Image(imageFileName));
         }
