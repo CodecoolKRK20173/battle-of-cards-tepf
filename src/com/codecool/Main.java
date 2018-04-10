@@ -56,6 +56,10 @@ public class Main extends Application{
         });
 
         menu.setBackground(new Image("/table/green.png"));
+        
+        stage.setTitle("Game Options");
+        stage.setScene(new Scene(menu, WINDOW_WIDTH, WINDOW_HEIGHT));
+        stage.show();    
     }
 
     private Scene getGameScene(){
