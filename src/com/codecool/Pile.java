@@ -19,6 +19,13 @@ public class Pile extends Pane {
     private double cardGap;
     private ObservableList<Card> cards = FXCollections.observableArrayList();
 
+    public Pile(PileType pileType, String name, double cardGap) {
+        this.pileType = pileType;
+        this.cardGap = cardGap;
+        this.name = name;
+    }
+
+
     public Pile(PileType pileType, Player owner, String name, double cardGap) {
         this.pileType = pileType;
         this.owner = owner;
