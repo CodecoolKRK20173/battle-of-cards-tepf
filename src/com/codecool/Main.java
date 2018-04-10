@@ -21,6 +21,8 @@ import java.awt.Toolkit;
 public class Main extends Application{
 
     List<Player> players = new ArrayList<>();
+    private static final double WINDOW_WIDTH = 1400;
+    private static final double WINDOW_HEIGHT = 928;
 
     public static void main(String[] args){
         launch(args);
@@ -54,6 +56,14 @@ public class Main extends Application{
         });
 
         menu.setBackground(new Image("/table/green.png"));
+    }
+
+    private Scene getGameScene(){
+
+        Game game = new Game(players);
+        game.setTableBackground(new Image("/table/green.png"));
+
+        return new Scene(game, WINDOW_WIDTH, WINDOW_HEIGHT);
     }
 
     private ChoiceBox<String> createNewChoiceBox(double x, double y){
