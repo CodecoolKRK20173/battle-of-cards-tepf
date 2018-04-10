@@ -120,4 +120,19 @@ public class Game extends Pane {
         }
     }
 
+    private void dealCards() {
+
+        Iterator<Card> deckIterator = deck.iterator();
+
+        while(deckIterator.hasNext()){
+            for(Pile destPile : playersPiles){
+                Card card = deckIterator.next();
+                destPile.addCard(card);
+                getChildren().add(card);
+                if(!deckIterator.hasNext()){
+                    break;
+                }
+            }
+        }
+    }
 }
