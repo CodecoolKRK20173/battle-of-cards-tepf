@@ -101,4 +101,8 @@ public class Main extends Application{
     
         return btn;
     }
+
+    private void setButtonTransparent(Button btn){
+        btn.setStyle("-fx-background-color: transparent;");
+    }
 }
