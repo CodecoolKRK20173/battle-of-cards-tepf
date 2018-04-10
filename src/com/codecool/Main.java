@@ -102,32 +102,4 @@ public class Main extends Application{
     
         return btn;
     }
-
-    private void setButtonSize(Button btn, double x, double y){
-        btn.setMaxSize(x, y);
-        btn.setMinSize(x, y);
-    }
-
-    private void makeButtonBorderGlow(Button btn){
-        btn.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-            @Override 
-            public void handle(MouseEvent e) {
-                btn.setStyle("-fx-border-color: lime; -fx-background-color: transparent;");
-    }});
-
-        btn.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-            @Override 
-            public void handle(MouseEvent e) {
-                btn.setStyle("-fx-border-color: transparent; -fx-background-color: transparent;");
-            }
-    });
-    }
-
-    // private void initButtonsOverCard(){
-    //     for (int i=0; i<4; i++){
-    //         spdButton = createNewButton("", x, y);
-
-    //     }
-    // }
-
 }
