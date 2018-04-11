@@ -6,6 +6,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.scene.control.Slider;
 import java.util.ArrayList;
+import javafx.scene.text.Text;
 
 public class ButtonHandler{
 
