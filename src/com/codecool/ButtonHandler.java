@@ -74,19 +74,23 @@ public class ButtonHandler{
     }
 
     private EventHandler<MouseEvent> spdButtonHandler = e -> {
-        System.out.println("Add spd comparator");
+        String stat = "SPD";
+        game.handleBattle(stat);
     };
     
     private EventHandler<MouseEvent> dmgButtonHandler = e -> {
-        System.out.println("Add dmg comparator");
+        String stat = "DMG";
+        game.handleBattle(stat);
     };
 
     private EventHandler<MouseEvent> armButtonHandler = e -> {
-        System.out.println("Add arm comparator");
+        String stat = "ARM";
+        game.handleBattle(stat);
     };
 
     private EventHandler<MouseEvent> hpButtonHandler = e -> {
-        System.out.println("Add hp comparator");
+        String stat = "HP";
+        game.handleBattle(stat);
     };
 
     private void initSlider() {

@@ -21,6 +21,7 @@ import java.util.List;
 
 import com.codecool.Enums.*;
 import com.codecool.Comparators.*;
+import com.codecool.Animation.*;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -211,7 +212,6 @@ public class Game extends Pane {
             result.add(new Card(cardName, backFace, frontFace, Status.FACEDOWN, row));
             i++;
         }
-
         Collections.shuffle(result);
 
         return result;
