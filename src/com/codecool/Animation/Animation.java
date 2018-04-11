@@ -20,29 +20,19 @@ import java.util.List;
 public class Animation {
 
     public void slideToDest(Card cardToSlide, Pile destPile) {
-        if (cardsToSlide == null)
+        if (cardToSlide == null){
             return;
-        double destCardGap = destPile.getCardGap();
-        double targetX;
-        double targetY;
-
-        if (destPile.isEmpty()) {
-            targetX = destPile.getLayoutX();
-            targetY = destPile.getLayoutY();
-        } else {
-            targetX = destPile.getTopCard().getLayoutX();
-            targetY = destPile.getTopCard().getLayoutY();
         }
+            
+        double targetX = destPile.getLayoutX();
+        double targetY = destPile.getLayoutY();
 
-        Card currentCard = cardsToSlide.get(i);
-        double sourceX = currentCard.getLayoutX() + currentCard.getTranslateX();
-        double sourceY = currentCard.getLayoutY() + currentCard.getTranslateY();
+        double sourceX = cardToSlide.getLayoutX() + cardToSlide.getTranslateX();
+        double sourceY = cardToSlide.getLayoutY() + cardToSlide.getTranslateY();
 
-        animateCardMovement(currentCard, sourceX, sourceY, targetX,
-                targetY + ((destPile.isEmpty() ? i : i + 1) * destCardGap), Duration.millis(150));
+        animateCardMovement(cardToSlide, sourceX, sourceY,
+                targetX, targetY, Duration.millis(150));
     }
-
-
 
     private void animateCardMovement(
             Card card, double sourceX, double sourceY,
@@ -56,14 +46,14 @@ public class Animation {
         pathTransition.setInterpolator(Interpolator.EASE_IN);
         // pathTransition.setOnFinished(doAfter);
 
-        Timeline blurReset = new Timeline();
-        KeyValue bx = new KeyValue(card.getDropShadow().offsetXProperty(), 0, Interpolator.EASE_IN);
-        KeyValue by = new KeyValue(card.getDropShadow().offsetYProperty(), 0, Interpolator.EASE_IN);
-        KeyValue br = new KeyValue(card.getDropShadow().radiusProperty(), 2, Interpolator.EASE_IN);
-        KeyFrame bKeyFrame = new KeyFrame(duration, bx, by, br);
-        blurReset.getKeyFrames().add(bKeyFrame);
+        // Timeline blurReset = new Timeline();
+        // KeyValue bx = new KeyValue(card.getDropShadow().offsetXProperty(), 0, Interpolator.EASE_IN);
+        // KeyValue by = new KeyValue(card.getDropShadow().offsetYProperty(), 0, Interpolator.EASE_IN);
+        // KeyValue br = new KeyValue(card.getDropShadow().radiusProperty(), 2, Interpolator.EASE_IN);
+        // KeyFrame bKeyFrame = new KeyFrame(duration, bx, by, br);
+        // blurReset.getKeyFrames().add(bKeyFrame);
 
-        ParallelTransition pt = new ParallelTransition(card, pathTransition, blurReset);
+        ParallelTransition pt = new ParallelTransition(card, pathTransition);
         pt.play();
     }
 
