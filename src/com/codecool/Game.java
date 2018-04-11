@@ -173,19 +173,19 @@ public class Game extends Pane {
         return result;
     }
 
-    public List<Card> getSortedCardsByStatistic(String stat, List<Card> cardsToCompare) {
+    public List<Card> getSortedCardsByStatistic(int stat, List<Card> cardsToCompare) {
 
         switch(stat) {
             
-            case "SPD":
+            case 0:
                 Collections.sort(cardsToCompare, new CardSortBySpd());
                 break;
-            case "DMG":
+            case 1:
                 Collections.sort(cardsToCompare, new CardSortByDmg());
                 break;
-            case "ARM":
+            case 2:
                 Collections.sort(cardsToCompare, new CardSortByArm());
-            case "HP":
+            case 3:
                 Collections.sort(cardsToCompare, new CardSortByHp());
         }
         return cardsToCompare;
