@@ -3,6 +3,7 @@ package com.codecool;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 import javafx.scene.control.Slider;
 import java.util.ArrayList;
 
