@@ -45,7 +45,7 @@ public class Game extends Pane {
         this.deck = createNewDeck();
         initPiles();
         dealCards();
-        players.get(0).activate();
+        initGame();
     }
 
     public void setTableBackground(Image tableBackground) {
@@ -180,6 +180,13 @@ public class Game extends Pane {
             player.setHand(playersPile);
             i++;
         }
+    }
+
+    private void initGame(){
+        Player firstPlayer = players.get(0);
+        
+        firstPlayer.activate();
+        setButtonsOnPlayer(firstPlayer);
     }
 
     private void dealCards() {
