@@ -7,15 +7,15 @@ import javafx.scene.paint.Color;
 
 import java.util.*;
 
-import com.codecool.Status;
-
-public class Card extends ImageView {
+public class Card extends ImageView implements Comparable {
 
     private String name;
     private int spd;
     private int dmg;
     private int arm;
     private int hp;
+
+    private boolean faceDown;
     
     private Status state;
 
@@ -45,6 +45,16 @@ public class Card extends ImageView {
         return statsArray;
     }
 
+    public void setBackFace() {
+        backFace = new Image("/card_images/card_back.png");
+        setImage(faceDown ? backFace : frontFace);
+    }
+
+    public void setFrontFace(Image newFrontFace) {
+        frontFace = newFrontFace;
+        setImage(faceDown ? backFace : frontFace);
+    }
+
     public Image getFrontFace() {
         return frontFace;
     }
@@ -66,11 +76,15 @@ public class Card extends ImageView {
     }
 
     public boolean isFaceDown() {
-        return state.getCardSide();
+        return faceDown;
     }
 
     public String getShortName() {
         return this.name;
+    }
+
+    public DropShadow getDropShadow() {
+        return dropShadow;
     }
 
     public Pile getContainingPile() {
@@ -92,7 +106,7 @@ public class Card extends ImageView {
         }else {
             this.state = Status.FACEDOWN;
         }
-        setImage(this.state.getCardSide() ? backFace : frontFace);
+        setImage(faceDown ? backFace : frontFace);
     }
 
     @Override
@@ -100,4 +114,23 @@ public class Card extends ImageView {
         return "Card name: " + this.name + "spd: " + this.spd + "dmg: " + this.dmg + "arm: " 
                              + this.arm + "hp: " + this.hp;
     }
+
+    // public static boolean isOppositeColor(Card card1, Card card2) {
+    //     return !card1.getSuit().getColor().equals(card2.getSuit().getColor()); 
+    // }
+
+    // public static boolean isSameSuit(Card card1, Card card2) {
+    //     return card1.getSuit() == card2.getSuit();
+    // }
+
+    public void loadCardImages(){
+        cardBackImage = new Image("card_images/card_back.png");
+        int numberOfCards = 30;
+        
+        for (int i = 1; i <= numberOfCards; i++) {
+            String imageFileName = "/card_images/tanks" + i + ".jpeg";
+
+            cardFaceImages.put(cardName, new Image(imageFileName));
+        }
+    }   
 }
