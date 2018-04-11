@@ -73,11 +73,11 @@ public class Game extends Pane {
     private int getLostPlayersNumber(){
         int lostPlayers = 0;
 
-        // for(Player player : players){
-        //     if (player.getStatus().equals(Player.Status.LOST)){
-        //         lostPlayers++;
-        //     }
-        // }
+        for(Player player : players){
+            if (player.getStatus().equals(Player.Status.OUT)){
+                lostPlayers++;
+            }
+        }
 
         return lostPlayers;
     }
