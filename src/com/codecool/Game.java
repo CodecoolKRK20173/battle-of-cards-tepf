@@ -32,8 +32,6 @@ public class Game extends Pane {
     private List<Pile> tableauPiles = FXCollections.observableArrayList();
     private List<Pile> playersPiles = FXCollections.observableArrayList();
     private static double GAP = 1;
-    private int xShift = 15;
-    private int yShift = 110;
     private Pile wastePile;
 
     private ImageHandler imageHandler = new ImageHandler();
@@ -64,9 +62,12 @@ public class Game extends Pane {
     }
 
     private void setButtonsOnPlayer(Player player){
-        int x = (int)player.getHand().getTopCard().getLayoutX();
-        int y = (int)player.getHand().getTopCard().getLayoutY();
-        buttonHandler.setButtonsPosition(x+xShift, y+yShift);
+        int xShift = 15;
+        int yShift = player.getHand().getCards().size() + 110;
+        
+        int x = (int)player.getHand().getLayoutX() + xShift;
+        int y = (int)player.getHand().getLayoutY() + yShift;
+        buttonHandler.setButtonsPosition(x, y);
     }
 
     private int getLostPlayersNumber(){
@@ -184,7 +185,7 @@ public class Game extends Pane {
 
     private void initGame(){
         Player firstPlayer = players.get(0);
-        
+
         firstPlayer.activate();
         setButtonsOnPlayer(firstPlayer);
     }
