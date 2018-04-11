@@ -13,21 +13,6 @@ public class ImageHandler extends ImageView{
     private int height = 215;
     private Map<String, Image> cardFaceImages = new HashMap<>();
     Image cardBackImage;
-    private DropShadow dropShadow;
-
-    // public void setBackFace() {
-    //     backFace = new Image("/card_images/card_back.png");
-    //     setImage(state.getCardSide() ? backFace : frontFace);
-    // }
-
-    // public void setFrontFace(Image newFrontFace) {
-    //     frontFace = newFrontFace;
-    //     setImage(state.getCardSide() ? backFace : frontFace);
-    // }
-
-    public DropShadow getDropShadow() {
-        return new DropShadow(2, Color.gray(0, 0.75));
-    }
     
     public void loadFaceCardImages(){
         
@@ -53,6 +38,6 @@ public class ImageHandler extends ImageView{
     }
 
     public int getWidth(){
-        return height;
+        return width;
     }
 }
