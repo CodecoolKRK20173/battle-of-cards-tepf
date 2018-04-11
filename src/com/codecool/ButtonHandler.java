@@ -74,22 +74,22 @@ public class ButtonHandler{
     }
 
     private EventHandler<MouseEvent> spdButtonHandler = e -> {
-        String stat = 0;
+        int stat = 0;
         game.handleBattle(stat);
     };
     
     private EventHandler<MouseEvent> dmgButtonHandler = e -> {
-        String stat = 1;
+        int stat = 1;
         game.handleBattle(stat);
     };
 
     private EventHandler<MouseEvent> armButtonHandler = e -> {
-        String stat = 2;
+        int stat = 2;
         game.handleBattle(stat);
     };
 
     private EventHandler<MouseEvent> hpButtonHandler = e -> {
-        String stat = 3;
+        int stat = 3;
         game.handleBattle(stat);
     };
 
