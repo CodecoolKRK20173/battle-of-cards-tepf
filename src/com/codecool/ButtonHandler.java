@@ -79,21 +79,25 @@ public class ButtonHandler{
     private EventHandler<MouseEvent> spdButtonHandler = e -> {
         int stat = 0;
         game.handleBattle(stat);
+        resetSlider();
     };
     
     private EventHandler<MouseEvent> dmgButtonHandler = e -> {
         int stat = 1;
         game.handleBattle(stat);
+        resetSlider();
     };
 
     private EventHandler<MouseEvent> armButtonHandler = e -> {
         int stat = 2;
         game.handleBattle(stat);
+        resetSlider();
     };
 
     private EventHandler<MouseEvent> hpButtonHandler = e -> {
         int stat = 3;
         game.handleBattle(stat);
+        resetSlider();
     };
 
     private void initSlider() {
@@ -106,7 +110,7 @@ public class ButtonHandler{
         bidSlider.setSnapToTicks(true);
         bidSlider.setStyle("-fx-base:black;");
         bidSlider.setBlockIncrement(1);
-        bidSlider.setOnKeyPressed(keyPressedHandler);
+        bidSlider.setOnKeyPressed(setSceneToHandle);
 
         Text sliderDescript = new Text("Bid");
         sliderDescript.setLayoutX(810);
@@ -130,6 +134,14 @@ public class ButtonHandler{
                 bidSlider.adjustValue(3);
                 break;
         }
+    };
+
+    public void setSceneToHandleKey(){
+        game.getScene().setOnKeyPressed(keyPressedHandler);
+    }
+
+    private EventHandler<KeyEvent> setSceneToHandle = e -> {
+        setSceneToHandleKey();
     };
 
     public void resetSlider() {
