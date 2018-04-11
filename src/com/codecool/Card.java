@@ -1,45 +1,40 @@
 package com.codecool;
 
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import com.codecool.Enums.*;
-
 import java.util.*;
 
 public class Card extends ImageView {
 
-    private String name;
     private int spd;
     private int dmg;
     private int arm;
     private int hp;
-    
+    private String name;    
     private Status state;
-
     private Image backFace;
     private Image frontFace;
-    
     private Pile containingPile;
-    private DropShadow dropShadow;
     
     public Card(String name, Image backFace, Image frontFace, Status state, ArrayList<Integer> stats) {
         this.name = name;
         this.backFace = backFace;
         this.frontFace = frontFace;
+        this.state = state;
         this.spd = stats.get(0);
         this.dmg = stats.get(1);
         this.arm = stats.get(2);
-        this.hp = stats.get(3);        
-        this.state = state;
-        // this.dropShadow = imageHandler.getDropShadow();
+        this.hp = stats.get(3);
+
         setImage(state.getCardSide() ? backFace : frontFace);
-        // setEffect(dropShadow);
     }
     
     public int getStatistic(int index) {
-        ArrayList<Integer> statsArray = new ArrayList<>(Arrays.asList(this.spd, this.dmg, this.arm, this.hp));
+        ArrayList<Integer> statsArray = new ArrayList<>();
+        statsArray.addAll(Arrays.asList(this.spd, this.dmg,
+                                        this.arm, this.hp));
 
         return statsArray.get(index);
     }
