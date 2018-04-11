@@ -1,4 +1,4 @@
-package com.codecool;
+package com.codecool.Enums;
 
 public enum Status {
     FACEDOWN(true),
