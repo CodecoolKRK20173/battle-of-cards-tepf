@@ -111,14 +111,7 @@ public class Game extends Pane {
         }
         else{
             Player winner = sortedCards.get(0).getContainingPile().getOwner();
-            for(Card card : sortedCards){
-                card.moveToPile(winner.getHand());
-            }
-            if(!wastePile.isEmpty()){
-                for(Card card : wastePile.getCards()){
-                    card.moveToPile(winner.getHand());
-                }
-            }
+            transferCardsAfterWin(winner);
             for(Player player : players){
                 if(!player.getHand().isEmpty()){
                     player.setStatus(Player.Status.PLAYING);
@@ -128,6 +121,25 @@ public class Game extends Pane {
         if(isGameOver()){
             System.out.println("Game ended");
         }
+    }
+
+    private void transferCardsAfterWin(Player winner){
+            for(Card card : sortedCards){
+                card.moveToPile(winner.getHand());
+            }
+            if(!wastePile.isEmpty()){
+                for(Card card : wastePile.getCards()){
+                    card.moveToPile(winner.getHand());
+                }
+            }
+        for(int i = (int)buttonHandler.getSliderValue(); i > 0; i--){
+            for (Player player : players) {
+                if(!player.equals(winner)){
+                    player.getHand().getTopCard().moveToPile(winner.getHand());
+                }
+            }
+        }
+        buttonHandler.resetSlider();
     }
 
     private boolean isDraw(List<Card> cards, int statistic){
