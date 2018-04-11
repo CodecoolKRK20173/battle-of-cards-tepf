@@ -97,7 +97,7 @@ public class Game extends Pane {
         }
     };
 
-    private void handleBattle(int statistic){
+    public void handleBattle(int statistic){
         List<Card> sortedCards = getSortedCardsByStatistic(statistic, getCardsToCompare());
         int maxStatistic = sortedCards.get(0).getStatistic(statistic);
         if(isDraw(sortedCards, statistic)){
