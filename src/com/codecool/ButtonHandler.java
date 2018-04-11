@@ -111,7 +111,7 @@ public class ButtonHandler{
         game.getChildren().add(sliderDescript);
     }
     
-    private void resetSlider() {
+    public void resetSlider() {
         bidSlider.adjustValue(0);
     }
 
