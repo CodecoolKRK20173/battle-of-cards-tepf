@@ -36,6 +36,7 @@ public class Game extends Pane {
 
     private ImageHandler imageHandler = new ImageHandler();
     private ButtonHandler buttonHandler = new ButtonHandler(this);
+    private Animation animationHandler = new Animation();
 
     public Game(List<Player> players) {
         this.players = players;
@@ -99,7 +100,15 @@ public class Game extends Pane {
     };
 
     public void handleBattle(int statistic){
-        List<Card> sortedCards = getSortedCardsByStatistic(statistic, getCardsToCompare());
+        List<Card> cardsToCompare = getCardsToCompare();
+        int index = 0;
+
+        for(Card card : cardsToCompare){
+            animationHandler.slideToDest(card, tableauPiles.get(index));
+            index++;
+        }
+        
+        List<Card> sortedCards = getSortedCardsByStatistic(statistic, cardsToCompare);
         int maxStatistic = sortedCards.get(0).getStatistic(statistic);
         if(isDraw(sortedCards, statistic)){
             for(Card card : sortedCards){
