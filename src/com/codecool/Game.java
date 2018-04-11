@@ -18,6 +18,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
+import com.codecool.Comparators.CardSortByArm;
+import com.codecool.Comparators.CardSortByDmg;
+import com.codecool.Comparators.CardSortByHp;
+import com.codecool.Comparators.CardSortBySpd;
+
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -162,9 +168,26 @@ public class Game extends Pane {
             result.add(new Card(cardName, backFace, frontFace, Status.FACEDOWN, row));
             i++;
         }
-
         Collections.shuffle(result);
 
         return result;
+    }
+
+    public List<Card> getSortedCardsByStatistic(String stat, List<Card> cardsToCompare) {
+
+        switch(stat) {
+            
+            case "SPD":
+                Collections.sort(cardsToCompare, new CardSortBySpd());
+                break;
+            case "DMG":
+                Collections.sort(cardsToCompare, new CardSortByDmg());
+                break;
+            case "ARM":
+                Collections.sort(cardsToCompare, new CardSortByArm());
+            case "HP":
+                Collections.sort(cardsToCompare, new CardSortByHp());
+        }
+        return cardsToCompare;
     }
 }
