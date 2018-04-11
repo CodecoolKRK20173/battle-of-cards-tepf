@@ -20,6 +20,7 @@ public class ButtonHandler{
     ButtonHandler(Game game){
         this.game = game;
         initButtons();
+        initSlider();
     }
 
     private void setButtonSize(Button btn, double x, double y){
