@@ -108,4 +108,8 @@ public class ButtonHandler{
     private void resetSlider() {
         bidSlider.adjustValue(0);
     }
+
+    public double getSliderValue(){
+        return bidSlider.getValue();
+    }
 }
