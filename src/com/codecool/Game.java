@@ -35,8 +35,11 @@ public class Game extends Pane {
 
     private ArrayList<Button> buttonList = new ArrayList<Button>(4);
 
+    private ImageHandler imageHandler = new ImageHandler();
+
     public Game(List<Player> players) {
         this.players = players;
+        imageHandler.loadFaceCardImages();
         this.deck = createNewDeck();
         initPiles();
         dealCards();
@@ -149,11 +152,13 @@ public class Game extends Pane {
         HandleFile readFile = new HandleFile("test.txt");
         List<ArrayList<Integer>> statsCollection = readFile.getStatsList();
         List<Card> result = new ArrayList<>();
+        Image backFace = imageHandler.getBackCardImage();
         int i = 1;
   
         for (ArrayList<Integer> row: statsCollection) {
             String cardName = String.valueOf(i);
-            result.add(new Card(cardName, Status.FACEDOWN, row));
+            Image frontFace = imageHandler.getFaceCardImage(cardName);
+            result.add(new Card(cardName, backFace, frontFace, Status.FACEDOWN, row));
             i++;
         }
 

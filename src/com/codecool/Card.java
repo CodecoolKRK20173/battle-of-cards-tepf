@@ -25,25 +25,18 @@ public class Card extends ImageView implements Comparable {
     private Pile containingPile;
     private DropShadow dropShadow;
     
-    static Image cardBackImage;
-    private static final Map<String, Image> cardFaceImages = new HashMap<>();
-    public static final int WIDTH = 150;
-    public static final int HEIGHT = 215;
-    
-    public Card(String name, Status state, ArrayList<Integer> stats) {
+    public Card(String name, Image backFace, Image frontFace, Status state, ArrayList<Integer> stats) {
         this.name = name;
-
+        this.backFace = backFace;
+        this.frontFace = frontFace;
         this.spd = stats.get(0);
         this.dmg = stats.get(1);
         this.arm = stats.get(2);
         this.hp = stats.get(3);        
-
-        this.faceDown = faceDown;
-        this.dropShadow = new DropShadow(2, Color.gray(0, 0.75));
-        backFace = cardBackImage;
-        frontFace = cardFaceImages.get(getShortName());
-        setImage(faceDown ? backFace : frontFace);
-        setEffect(dropShadow);
+        this.state = state;
+        // this.dropShadow = imageHandler.getDropShadow();
+        setImage(state.getCardSide() ? backFace : frontFace);
+        // setEffect(dropShadow);
     }
     
     public Integer[] getStatsArray() {
