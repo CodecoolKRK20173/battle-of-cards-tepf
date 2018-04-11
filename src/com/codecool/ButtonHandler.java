@@ -2,6 +2,7 @@ package com.codecool;
 
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.scene.control.Slider;
@@ -105,6 +106,7 @@ public class ButtonHandler{
         bidSlider.setSnapToTicks(true);
         bidSlider.setStyle("-fx-base:black;");
         bidSlider.setBlockIncrement(1);
+        bidSlider.setOnKeyPressed(keyPressedHandler);
 
         Text sliderDescript = new Text("Bid");
         sliderDescript.setLayoutX(810);
@@ -112,7 +114,24 @@ public class ButtonHandler{
         sliderDescript.setStyle("-fx-font-size: 16; -fx-color: black;");
         game.getChildren().addAll(bidSlider, sliderDescript);
     }
-    
+
+    private EventHandler<KeyEvent> keyPressedHandler = e -> {
+        switch(e.getText()){
+            case "0":
+                resetSlider();
+                break;
+            case "1":
+                bidSlider.adjustValue(1);
+                break;
+            case "2":
+                bidSlider.adjustValue(2);
+                break;
+            case "3":
+                bidSlider.adjustValue(3);
+                break;
+        }
+    };
+
     public void resetSlider() {
         bidSlider.adjustValue(0);
     }
