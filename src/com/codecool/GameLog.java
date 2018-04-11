@@ -10,10 +10,12 @@ public class GameLog{
     private Game game;
     private StringBuilder sb = new StringBuilder();
     private TextArea textArea = new TextArea();
+    private Button turnLog = new Button("Game Log");
 
     GameLog(Game game){
         this.game = game;
         initLog();
+        initButton();
     }
 
     private void initLog(){
@@ -34,6 +36,19 @@ public class GameLog{
         textArea.setText(sb.toString());
     }
 
+    private void initButton(){
+        turnLog.setLayoutX(40);
+        turnLog.setLayoutY(590);
+        turnLog.setOnMousePressed(handleClick);
+        game.getChildren().add(turnLog);
+    }
 
+    private EventHandler<MouseEvent> handleClick = e ->{
+        if (game.getChildren().contains(textArea)){
+            game.getChildren().remove(textArea);
+        } else{
+            game.getChildren().add(textArea);
+        }
+    };
 
 }
