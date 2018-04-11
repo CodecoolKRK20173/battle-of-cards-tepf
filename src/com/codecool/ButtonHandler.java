@@ -96,20 +96,21 @@ public class ButtonHandler{
     };
 
     private void initSlider() {
-        bidSlider.setLayoutX(1200);
-        bidSlider.setLayoutY(800);
+        bidSlider.setLayoutX(800);
+        bidSlider.setLayoutY(700);
         bidSlider.setShowTickLabels(true);
         bidSlider.setShowTickMarks(true);
         bidSlider.setMajorTickUnit(1);
         bidSlider.setMinorTickCount(0);
         bidSlider.setSnapToTicks(true);
-    
+        bidSlider.setStyle("-fx-base:black;");
+        bidSlider.setBlockIncrement(1);
+
         Text sliderDescript = new Text("Bid");
-        sliderDescript.setLayoutX(1200);
-        sliderDescript.setLayoutY(780);
-    
-        game.getChildren().add(bidSlider);
-        game.getChildren().add(sliderDescript);
+        sliderDescript.setLayoutX(810);
+        sliderDescript.setLayoutY(690);
+        sliderDescript.setStyle("-fx-font-size: 16; -fx-color: black;");
+        game.getChildren().addAll(bidSlider, sliderDescript);
     }
     
     public void resetSlider() {
