@@ -3,6 +3,7 @@ package com.codecool;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.control.Slider;
 import java.util.ArrayList;
 
 public class ButtonHandler{
@@ -11,6 +12,7 @@ public class ButtonHandler{
     private Button dmgButton = new Button();
     private Button armButton = new Button();
     private Button hpButton = new Button();
+    private Slider bidSlider = new Slider(0.0, 3.0, 0.0);
 
     private ArrayList<Button> buttonList = new ArrayList<Button>(4);
     private Game game;
@@ -86,4 +88,24 @@ public class ButtonHandler{
         System.out.println("Add hp comparator");
     };
 
+    private void initSlider() {
+        bidSlider.setLayoutX(1200);
+        bidSlider.setLayoutY(800);
+        bidSlider.setShowTickLabels(true);
+        bidSlider.setShowTickMarks(true);
+        bidSlider.setMajorTickUnit(1);
+        bidSlider.setMinorTickCount(0);
+        bidSlider.setSnapToTicks(true);
+    
+        Text sliderDescript = new Text("Bid");
+        sliderDescript.setLayoutX(1200);
+        sliderDescript.setLayoutY(780);
+    
+        game.getChildren().add(bidSlider);
+        game.getChildren().add(sliderDescript);
+    }
+    
+    private void resetSlider() {
+        bidSlider.adjustValue(0);
+    }
 }
