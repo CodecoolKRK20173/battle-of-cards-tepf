@@ -20,6 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.concurrent.TimeUnit;
 
 import com.codecool.Enums.*;
 import com.codecool.Comparators.*;
@@ -122,7 +123,7 @@ public class Game extends Pane {
             for(Pile destPile : playersPiles){
                 Card card = deckIterator.next();
                 addMouseEventHandlers(card);
-                destPile.addCard(card);
+                destPile.addCardOnTop(card);
                 getChildren().add(card);
                 if(!deckIterator.hasNext()){
                     break;
@@ -144,13 +145,13 @@ public class Game extends Pane {
                     Player player = card.getContainingPile().getOwner();
                     player.setStatus(Player.Status.OUT);
                 }
-                card.moveToPile(wastePile);
+                // card.moveToPile(wastePile);
             }
         }
         else{
             Player winner = sortedCards.get(0).getContainingPile().getOwner();
 
-            moveWinnedCards(sortedCards, winner);
+            // moveWinnedCards(sortedCards, winner);
             restorePlayersToGame();
         }
 

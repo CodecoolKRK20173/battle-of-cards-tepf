@@ -8,12 +8,12 @@ import javafx.animation.ParallelTransition;
 import javafx.animation.PathTransition;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
-// import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.util.Duration;
+import javafx.event.EventHandler;
 
 import java.util.List;
 
@@ -27,16 +27,24 @@ public class Animation {
         double targetX = destPile.getLayoutX();
         double targetY = destPile.getLayoutY();
 
+        System.out.println("Moved card " + cardToSlide + " X: " + targetX + " Y: " + targetY);
+
         double sourceX = cardToSlide.getLayoutX() + cardToSlide.getTranslateX();
         double sourceY = cardToSlide.getLayoutY() + cardToSlide.getTranslateY();
 
         animateCardMovement(cardToSlide, sourceX, sourceY,
-                targetX, targetY, Duration.millis(150));
+                targetX, targetY, Duration.millis(1000),
+                e -> {
+                    cardToSlide.moveToPile(destPile);
+                    if(cardToSlide.isFaceDown()){
+                        cardToSlide.flip();
+                    }});
     }
 
     private void animateCardMovement(
             Card card, double sourceX, double sourceY,
-            double targetX, double targetY, Duration duration) {
+            double targetX, double targetY, Duration duration,
+            EventHandler<ActionEvent> doAfter) {
 
         Path path = new Path();
         path.getElements().add(new MoveToAbs(card, sourceX, sourceY));
@@ -44,14 +52,7 @@ public class Animation {
 
         PathTransition pathTransition = new PathTransition(duration, path, card);
         pathTransition.setInterpolator(Interpolator.EASE_IN);
-        // pathTransition.setOnFinished(doAfter);
-
-        // Timeline blurReset = new Timeline();
-        // KeyValue bx = new KeyValue(card.getDropShadow().offsetXProperty(), 0, Interpolator.EASE_IN);
-        // KeyValue by = new KeyValue(card.getDropShadow().offsetYProperty(), 0, Interpolator.EASE_IN);
-        // KeyValue br = new KeyValue(card.getDropShadow().radiusProperty(), 2, Interpolator.EASE_IN);
-        // KeyFrame bKeyFrame = new KeyFrame(duration, bx, by, br);
-        // blurReset.getKeyFrames().add(bKeyFrame);
+        pathTransition.setOnFinished(doAfter);
 
         ParallelTransition pt = new ParallelTransition(card, pathTransition);
         pt.play();
