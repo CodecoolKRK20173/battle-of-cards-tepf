@@ -18,6 +18,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
+import com.codecool.Enums.*;
+import com.codecool.Comparators.*;
+
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -29,6 +33,7 @@ public class Game extends Pane {
     private static double GAP = 1;
     private int xShift = 15;
     private int yShift = 110;
+    private Pile wastePile;
 
     private ImageHandler imageHandler = new ImageHandler();
     private ButtonHandler buttonHandler = new ButtonHandler(this);
@@ -91,21 +96,65 @@ public class Game extends Pane {
         }
     };
 
-    private void handleBattle(Card card, Pile destPile) {
-        List<Card> cardsToCompare = new ArrayList<>();
-        
-        for(Player player : players){
-            if (!player.getHand().isEmpty()){
-                cardsToCompare.add(player.getHand().getTopCard());
+    private void handleBattle(int statistic){
+        List<Card> sortedCards = getSortedCardsByStatistic(statistic, getCardsToCompare());
+        int maxStatistic = sortedCards.get(0).getStatistic(statistic);
+        if(isDraw(sortedCards, statistic)){
+            for(Card card : sortedCards){
+                if(card.getStatistic(statistic) < maxStatistic){
+                    Player player = card.getContainingPile().getOwner();
+                    player.setStatus(Player.Status.OUT);
+                }
+                card.moveToPile(wastePile);
             }
         }
-
+        else{
+            Player winner = sortedCards.get(0).getContainingPile().getOwner();
+            for(Card card : sortedCards){
+                card.moveToPile(winner.getHand());
+            }
+            if(!wastePile.isEmpty()){
+                for(Card card : wastePile.getCards()){
+                    card.moveToPile(winner.getHand());
+                }
+            }
+            for(Player player : players){
+                if(!player.getHand().isEmpty()){
+                    player.setStatus(Player.Status.PLAYING);
+                }
+            }
+        }
         if(isGameOver()){
             System.out.println("Game ended");
         }
     }
 
+    private boolean isDraw(List<Card> cards, int statistic){
+        int firstElement = cards.get(0).getStatistic(statistic);
+        int secondElement = cards.get(1).getStatistic(statistic);
+
+        return firstElement == secondElement;
+    }
+
+    private List<Card> getCardsToCompare(){
+        List<Card> cardsToCompare = new ArrayList<>();
+        
+        for(Player player : players){
+            if (player.getStatus().isPlaying()){
+                cardsToCompare.add(player.getHand().getTopCard());
+            }
+        }
+
+        return cardsToCompare;
+    }
+
     private void initPiles() {
+
+        wastePile = new Pile(Pile.PileType.WASTE, "Waste", GAP);
+        wastePile.setBlurredBackground();
+        wastePile.setLayoutX(95);
+        wastePile.setLayoutY(20);
+        getChildren().add(wastePile);
         
         for (int i = 0; i < players.size(); i++) {
             Pile tableauPile = new Pile(Pile.PileType.TABLEAU, "Tableau " + i, GAP);
@@ -166,5 +215,23 @@ public class Game extends Pane {
         Collections.shuffle(result);
 
         return result;
+    }
+
+    public List<Card> getSortedCardsByStatistic(int stat, List<Card> cardsToCompare) {
+        switch(stat) { 
+            case 0:
+                Collections.sort(cardsToCompare, new CardSortBySpd());
+                break;
+            case 1:
+                Collections.sort(cardsToCompare, new CardSortByDmg());
+                break;
+            case 2:
+                Collections.sort(cardsToCompare, new CardSortByArm());
+                break;
+            case 3:
+                Collections.sort(cardsToCompare, new CardSortByHp());
+        }
+        
+        return cardsToCompare;
     }
 }

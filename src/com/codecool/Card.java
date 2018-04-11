@@ -4,18 +4,17 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import com.codecool.Enums.*;
 
 import java.util.*;
 
-public class Card extends ImageView implements Comparable {
+public class Card extends ImageView {
 
     private String name;
     private int spd;
     private int dmg;
     private int arm;
     private int hp;
-
-    private boolean faceDown;
     
     private Status state;
 
@@ -39,20 +38,10 @@ public class Card extends ImageView implements Comparable {
         // setEffect(dropShadow);
     }
     
-    public Integer[] getStatsArray() {
-        Integer[] statsArray = {this.spd, this.dmg, this.arm, this.hp};
+    public int getStatistic(int index) {
+        ArrayList<Integer> statsArray = new ArrayList<>(Arrays.asList(this.spd, this.dmg, this.arm, this.hp));
 
-        return statsArray;
-    }
-
-    public void setBackFace() {
-        backFace = new Image("/card_images/card_back.png");
-        setImage(faceDown ? backFace : frontFace);
-    }
-
-    public void setFrontFace(Image newFrontFace) {
-        frontFace = newFrontFace;
-        setImage(faceDown ? backFace : frontFace);
+        return statsArray.get(index);
     }
 
     public Image getFrontFace() {
@@ -76,15 +65,11 @@ public class Card extends ImageView implements Comparable {
     }
 
     public boolean isFaceDown() {
-        return faceDown;
+        return state.getCardSide();
     }
 
     public String getShortName() {
         return this.name;
-    }
-
-    public DropShadow getDropShadow() {
-        return dropShadow;
     }
 
     public Pile getContainingPile() {
@@ -106,7 +91,7 @@ public class Card extends ImageView implements Comparable {
         }else {
             this.state = Status.FACEDOWN;
         }
-        setImage(faceDown ? backFace : frontFace);
+        setImage(this.state.getCardSide() ? backFace : frontFace);
     }
 
     @Override
@@ -114,23 +99,4 @@ public class Card extends ImageView implements Comparable {
         return "Card name: " + this.name + "spd: " + this.spd + "dmg: " + this.dmg + "arm: " 
                              + this.arm + "hp: " + this.hp;
     }
-
-    // public static boolean isOppositeColor(Card card1, Card card2) {
-    //     return !card1.getSuit().getColor().equals(card2.getSuit().getColor()); 
-    // }
-
-    // public static boolean isSameSuit(Card card1, Card card2) {
-    //     return card1.getSuit() == card2.getSuit();
-    // }
-
-    public void loadCardImages(){
-        cardBackImage = new Image("card_images/card_back.png");
-        int numberOfCards = 30;
-        
-        for (int i = 1; i <= numberOfCards; i++) {
-            String imageFileName = "/card_images/tanks" + i + ".jpeg";
-
-            cardFaceImages.put(cardName, new Image(imageFileName));
-        }
-    }   
 }

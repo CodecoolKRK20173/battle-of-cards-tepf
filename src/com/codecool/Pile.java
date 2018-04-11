@@ -64,9 +64,8 @@ public class Pile extends Pane {
     }
 
     public void addCard(Card card) {
-        cards.add(card);
+        cards.add(0, card);
         card.setContainingPile(this);
-        card.toFront();
         layoutCard(card);
     }
 
@@ -96,6 +95,7 @@ public class Pile extends Pane {
 
     public enum PileType {
         HAND,
-        TABLEAU
+        TABLEAU,
+        WASTE
     }
 }
