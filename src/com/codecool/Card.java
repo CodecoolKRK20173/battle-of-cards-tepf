@@ -19,26 +19,24 @@ public class Card extends ImageView {
     
     private Status state;
 
-    private ImageHandler imageHandler = new ImageHandler();
     private Image backFace;
     private Image frontFace;
     
     private Pile containingPile;
     private DropShadow dropShadow;
     
-    public Card(String name, Status state, ArrayList<Integer> stats) {
+    public Card(String name, Image backFace, Image frontFace, Status state, ArrayList<Integer> stats) {
         this.name = name;
+        this.backFace = backFace;
+        this.frontFace = frontFace;
         this.spd = stats.get(0);
         this.dmg = stats.get(1);
         this.arm = stats.get(2);
         this.hp = stats.get(3);        
         this.state = state;
-        imageHandler.loadFaceCardImages();
-        this.dropShadow = imageHandler.getDropShadow();
-        backFace = imageHandler.getBackCardImage();
-        frontFace = imageHandler.getFaceCardImage(getShortName());
+        // this.dropShadow = imageHandler.getDropShadow();
         setImage(state.getCardSide() ? backFace : frontFace);
-        setEffect(dropShadow);
+        // setEffect(dropShadow);
     }
     
     public Integer[] getStatsArray() {
