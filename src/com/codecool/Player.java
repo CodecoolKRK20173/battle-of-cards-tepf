@@ -32,7 +32,17 @@ public abstract class Player{
     }
 
     public enum Status{
-        PLAYING,
-        LOST
+        PLAYING (true),
+        OUT (false);
+
+        private boolean isPlaying;
+
+        private Status(boolean isPlaying){
+            this.isPlaying = isPlaying;
+        }
+
+        public boolean getStatus(){
+            return this.isPlaying;
+        }
     }
 }

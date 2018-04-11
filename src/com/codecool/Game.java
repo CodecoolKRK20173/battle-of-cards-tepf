@@ -27,15 +27,11 @@ public class Game extends Pane {
     private List<Pile> tableauPiles = FXCollections.observableArrayList();
     private List<Pile> playersPiles = FXCollections.observableArrayList();
     private static double GAP = 1;
-
-    private Button spdButton = new Button();
-    private Button dmgButton = new Button();
-    private Button armButton = new Button();
-    private Button hpButton = new Button();
-
-    private ArrayList<Button> buttonList = new ArrayList<Button>(4);
+    private int xShift = 15;
+    private int yShift = 110;
 
     private ImageHandler imageHandler = new ImageHandler();
+    private ButtonHandler buttonHandler = new ButtonHandler(this);
 
     public Game(List<Player> players) {
         this.players = players;
@@ -43,7 +39,6 @@ public class Game extends Pane {
         this.deck = createNewDeck();
         initPiles();
         dealCards();
-        initButtons();
         players.get(0).activate();
     }
 
@@ -62,14 +57,20 @@ public class Game extends Pane {
         return false;
     }
 
+    private void setButtonsOnPlayer(Player player){
+        int x = (int)player.getHand().getTopCard().getLayoutX();
+        int y = (int)player.getHand().getTopCard().getLayoutY();
+        buttonHandler.setButtonsPosition(x+xShift, y+yShift);
+    }
+
     private int getLostPlayersNumber(){
         int lostPlayers = 0;
 
-        for(Player player : players){
-            if (player.getStatus().equals(Player.Status.LOST)){
-                lostPlayers++;
-            }
-        }
+        // for(Player player : players){
+        //     if (player.getStatus().equals(Player.Status.LOST)){
+        //         lostPlayers++;
+        //     }
+        // }
 
         return lostPlayers;
     }
@@ -166,71 +167,4 @@ public class Game extends Pane {
 
         return result;
     }
-
-    private void setButtonSize(Button btn, double x, double y){
-        btn.setMaxSize(x, y);
-        btn.setMinSize(x, y);
-    }
-
-    private void makeButtonBorderGlow(Button btn){
-        btn.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
-            @Override 
-            public void handle(MouseEvent e) {
-                btn.setStyle("-fx-border-color: lime; -fx-background-color: transparent;");
-    }});
-
-        btn.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
-            @Override 
-            public void handle(MouseEvent e) {
-                btn.setStyle("-fx-border-color: transparent; -fx-background-color: transparent;");
-            }
-    });
-    }
-
-    private void setButtonParameters(Button btn, int x, int y){
-        btn.setLayoutX(x);
-        btn.setLayoutY(y);
-        setButtonSize(btn,20,20);
-        makeButtonBorderGlow(btn);
-    }
-
-    private void initButtons(){
-        spdButton.setOnMouseClicked(spdButtonHandler);
-        buttonList.add(spdButton);
-
-        dmgButton.setOnMouseClicked(dmgButtonHandler);
-        buttonList.add(dmgButton);
-
-        armButton.setOnMouseClicked(armButtonHandler);
-        buttonList.add(armButton);
-
-        hpButton.setOnMouseClicked(hpButtonHandler);
-        buttonList.add(hpButton);
-
-        int x = 400;
-        int y = 300;
-        for (Button btn : buttonList) {
-            setButtonParameters(btn, x, y);
-            x += 150;
-        }
-
-        getChildren().addAll(buttonList);
-    }
-
-    private EventHandler<MouseEvent> spdButtonHandler = e -> {
-        System.out.println("Add spd comparator");
-    };
-    
-    private EventHandler<MouseEvent> dmgButtonHandler = e -> {
-        System.out.println("Add dmg comparator");
-    };
-
-    private EventHandler<MouseEvent> armButtonHandler = e -> {
-        System.out.println("Add arm comparator");
-    };
-
-    private EventHandler<MouseEvent> hpButtonHandler = e -> {
-        System.out.println("Add hp comparator");
-    };
-
 }
