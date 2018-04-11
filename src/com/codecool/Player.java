@@ -15,8 +15,8 @@ public abstract class Player{
         return hand;
     }
 
-    public Status getStatus(){
-        return status;
+    public void setStatus(Status status){
+        this.status = status;
     }
 
     public boolean isActivePlayer(){
@@ -25,6 +25,10 @@ public abstract class Player{
 
     public void activate(){
         isActive = true;
+    }
+
+    public Status getStatus(){
+        return this.status;
     }
 
     public void deactivate(){
@@ -41,7 +45,7 @@ public abstract class Player{
             this.isPlaying = isPlaying;
         }
 
-        public boolean getStatus(){
+        public boolean isPlaying(){
             return this.isPlaying;
         }
     }
