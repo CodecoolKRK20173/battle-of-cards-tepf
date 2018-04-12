@@ -279,4 +279,13 @@ public class Game extends Pane {
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
                 BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
     }
+
+    public Player getActivePlayer(){
+        for (Player player : players) {
+            if(player.isActivePlayer()){
+                return player;
+            }
+        }
+        return players.get(0);
+    }
 }
