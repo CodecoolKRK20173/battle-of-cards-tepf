@@ -39,6 +39,7 @@ public class Game extends Pane {
     private List<Card> deck = new ArrayList<>();
     private Pile wastePile;
     private double GAP = 1;
+    private List<Card> cardsToMoveFromBids = new ArrayList<>();
 
     public Game(List<Player> players) {
         this.players = players;
@@ -280,5 +281,28 @@ public class Game extends Pane {
         setBackground(new Background(new BackgroundImage(tableBackground,
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
                 BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+    }
+
+    public Player getActivePlayer(){
+        for (Player player : players) {
+            if(player.isActivePlayer()){
+                return player;
+            }
+        }
+        return players.get(0);
+    }
+
+    private void addBidCards(){
+        int numberOfBidCards = (int) buttonHandler.getSliderValue();
+
+        for (Player player : players) {
+            if(player.getStatus().isPlaying()){
+                for(int i = 1; i < numberOfBidCards + 1; i++){
+                    if(player.getHand().numOfCards() > i){
+                        cardsToMoveFromBids.add(player.getHand().getCardAt(i));
+                    }
+                }
+            }
+        }
     }
 }

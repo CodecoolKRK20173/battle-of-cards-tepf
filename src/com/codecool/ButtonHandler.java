@@ -78,26 +78,38 @@ public class ButtonHandler{
 
     private EventHandler<MouseEvent> spdButtonHandler = e -> {
         int stat = 0;
+        if(game.getActivePlayer().getHand().numOfCards() > getSliderValue()){
         game.handleBattle(stat);
         resetSlider();
+            System.out.println(game.getActivePlayer().getHand().numOfCards());
+        }
     };
     
     private EventHandler<MouseEvent> dmgButtonHandler = e -> {
         int stat = 1;
+        if(game.getActivePlayer().getHand().numOfCards() > getSliderValue()){
         game.handleBattle(stat);
         resetSlider();
+            System.out.println(game.getActivePlayer().getHand().numOfCards());
+        }
     };
 
     private EventHandler<MouseEvent> armButtonHandler = e -> {
         int stat = 2;
+        if(game.getActivePlayer().getHand().numOfCards() > getSliderValue()){
         game.handleBattle(stat);
         resetSlider();
+            System.out.println(game.getActivePlayer().getHand().numOfCards());
+        }
     };
 
     private EventHandler<MouseEvent> hpButtonHandler = e -> {
         int stat = 3;
+        if(game.getActivePlayer().getHand().numOfCards() > getSliderValue()){
         game.handleBattle(stat);
         resetSlider();
+            System.out.println(game.getActivePlayer().getHand().numOfCards());
+        }
     };
 
     private void initSlider() {
