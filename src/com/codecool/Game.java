@@ -179,6 +179,7 @@ public class Game extends Pane {
         if(isDraw){
             moveCardsToWaste();
             setFirstPlayer(activePlayer);
+            winner = activePlayer;
         }
         else if(!activePlayer.equals(winner)){
             activePlayer.deactivate();
@@ -216,7 +217,7 @@ public class Game extends Pane {
             if(player.getHand().isEmpty()){
                 player.setStatus(Player.Status.OUT);
             }
-            System.out.println(player.getStatus());
+            // System.out.println(player.getStatus());
         }
         winner.setStatus(Player.Status.PLAYING);
     }
