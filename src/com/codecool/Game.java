@@ -36,6 +36,7 @@ public class Game extends Pane {
     private Animation animationHandler = new Animation();
     private List<Player> players = new ArrayList<>();
     private List<Card> deck = new ArrayList<>();
+    private List<Card> battleCards = new ArrayList<>();
     private Pile wastePile;
     private double GAP = 1;
 
