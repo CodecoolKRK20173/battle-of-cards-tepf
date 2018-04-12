@@ -32,6 +32,7 @@ public class Game extends Pane {
     private List<Pile> tableauPiles = FXCollections.observableArrayList();
     private List<Pile> playersPiles = FXCollections.observableArrayList();
     private ButtonHandler buttonHandler = new ButtonHandler(this);
+    private GameLog gameLog = new GameLog(this);
     private ImageHandler imageHandler = new ImageHandler();
     private Animation animationHandler = new Animation();
     private List<Player> players = new ArrayList<>();
@@ -271,6 +272,7 @@ public class Game extends Pane {
             if (owner.isActivePlayer() && card.isFaceDown()){
                 card.flip();
                 System.out.println(card + " revealed.");
+                gameLog.addToLog("test");
             }
         }
     };
