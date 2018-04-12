@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
@@ -138,7 +139,7 @@ public class Game extends Pane {
         List<Card> cardsToCompare = getCardsToCompare();
         List<Card> sortedCards = getSortedCardsByStatistic(statistic, cardsToCompare);
         int maxStatistic = sortedCards.get(0).getStatistic(statistic);
-
+        addBidCards();
         animateCardsMovement(cardsToCompare);
 
         if(isDraw(sortedCards, statistic)){
@@ -171,6 +172,10 @@ public class Game extends Pane {
                 card.moveToPile(winner.getHand());
             }
         }
+        for (Card card : cardsToMoveFromBids) {
+            card.moveToPile(winner.getHand());
+        }
+        cardsToMoveFromBids.clear();
     }
 
     private void restorePlayersToGame(){
