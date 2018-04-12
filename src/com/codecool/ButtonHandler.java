@@ -126,7 +126,6 @@ public class ButtonHandler{
 
     private void pushedNext() {
         int stat = 3;
-        if(game.getActivePlayer().getHand().numOfCards() > getSliderValue()){
         game.handleBattle(stat);
         resetSlider();
         nextButton.setVisible(true);
