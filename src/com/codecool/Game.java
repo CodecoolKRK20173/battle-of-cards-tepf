@@ -208,7 +208,7 @@ public class Game extends Pane {
 
     private void setFirstPlayer(Player activePlayer){
         for(Player player : players){
-            if(player.getStatus() == Player.Status.PLAYING){
+            if(player.getStatus() == Player.Status.PLAYING && !player.equals(activePlayer)){
                 activePlayer.deactivate();
                 player.activate();
                 setButtonsOnPlayer(player);
