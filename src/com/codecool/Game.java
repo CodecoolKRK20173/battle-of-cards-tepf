@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
@@ -32,6 +33,7 @@ public class Game extends Pane {
     private List<Pile> tableauPiles = FXCollections.observableArrayList();
     private List<Pile> playersPiles = FXCollections.observableArrayList();
     private ButtonHandler buttonHandler = new ButtonHandler(this);
+    private GameLog gameLog = new GameLog(this);
     private ImageHandler imageHandler = new ImageHandler();
     private Animation animationHandler = new Animation();
     private List<Player> players = new ArrayList<>();
@@ -39,6 +41,7 @@ public class Game extends Pane {
     private List<Card> battleCards = new ArrayList<>();
     private Pile wastePile;
     private double GAP = 1;
+    private List<Card> cardsToMoveFromBids = new ArrayList<>();
     private boolean isDraw = false;
     Player winner;
 
@@ -148,6 +151,9 @@ public class Game extends Pane {
         battleCards = getCardsToCompare();
         List<Card> sortedCards = getSortedCardsByStatistic(statistic, battleCards);
         int maxStatistic = sortedCards.get(0).getStatistic(statistic);
+        addBidCards();
+        animateCardsMovement(cardsToCompare);
+
         isDraw = checkBattleResult(sortedCards, statistic);
 
         if(isDraw){
@@ -229,7 +235,7 @@ public class Game extends Pane {
         }
     }
 
-    private Player getActivePlayer(){
+    public Player getActivePlayer(){
         for(Player player : players){
             if(player.isActivePlayer()){
                 return player;
@@ -250,6 +256,10 @@ public class Game extends Pane {
                 animationHandler.slideToDest(card, destPile);
             }
         }
+        for (Card card : cardsToMoveFromBids) {
+            card.moveToPile(winner.getHand());
+        }
+        cardsToMoveFromBids.clear();
     }
 
     private void restorePlayersToGame(){
@@ -349,5 +359,19 @@ public class Game extends Pane {
         setBackground(new Background(new BackgroundImage(tableBackground,
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
                 BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+    }
+
+    private void addBidCards(){
+        int numberOfBidCards = (int) buttonHandler.getSliderValue();
+
+        for (Player player : players) {
+            if(player.getStatus().isPlaying()){
+                for(int i = 1; i < numberOfBidCards + 1; i++){
+                    if(player.getHand().numOfCards() > i){
+                        cardsToMoveFromBids.add(player.getHand().getCardAt(i));
+                    }
+                }
+            }
+        }
     }
 }
