@@ -294,7 +294,7 @@ public class Game extends Pane {
                 return player;
             }
         }
-        return players.get(0);
+        return null;
     }
 
     private void addBidCards(){
