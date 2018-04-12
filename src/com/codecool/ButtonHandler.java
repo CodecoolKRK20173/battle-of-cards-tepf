@@ -15,6 +15,7 @@ public class ButtonHandler{
     private Button dmgButton = new Button();
     private Button armButton = new Button();
     private Button hpButton = new Button();
+    private Button nextButton = new Button();
     private Slider bidSlider = new Slider(0.0, 3.0, 0.0);
 
     private ArrayList<Button> buttonList = new ArrayList<Button>(4);
@@ -35,32 +36,45 @@ public class ButtonHandler{
         btn.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
             @Override 
             public void handle(MouseEvent e) {
-                btn.setStyle("-fx-border-color: lime; -fx-background-color: transparent;");
+                btn.setStyle("-fx-border-color: lime; -fx-background-color: transparent; -fx-border-width: 3");
     }});
 
         btn.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
             @Override 
             public void handle(MouseEvent e) {
-                btn.setStyle("-fx-border-color: transparent; -fx-background-color: transparent;");
+                btn.setStyle("-fx-border-color: transparent; -fx-background-color: transparent; -fx-border-width: 3");
             }
     });
     }
 
     public void initButtons(){
         spdButton.setOnMouseClicked(spdButtonHandler);
+        spdButton.setStyle("-fx-background-color: transparent");
         buttonList.add(spdButton);
 
         dmgButton.setOnMouseClicked(dmgButtonHandler);
+        dmgButton.setStyle("-fx-background-color: transparent");
         buttonList.add(dmgButton);
 
         armButton.setOnMouseClicked(armButtonHandler);
+        armButton.setStyle("-fx-background-color: transparent");
         buttonList.add(armButton);
 
         hpButton.setOnMouseClicked(hpButtonHandler);
+        hpButton.setStyle("-fx-background-color: transparent");
         buttonList.add(hpButton);
 
+        nextButton.setOnMouseClicked(nextButtonHandler);
+        setButtonSize(nextButton, 100, 100);
+        nextButton.setText("Next Round");
+        nextButton.setLayoutX(1100);
+        nextButton.setLayoutY(600);
+        nextButton.toFront();
+        nextButton.setVisible(false);
+        game.getChildren().add(nextButton);
+
         for (Button btn : buttonList) {
-            setButtonSize(btn, 20, 20);
+            setButtonSize(btn, 25, 25);
             makeButtonBorderGlow(btn);
         }
 
@@ -81,7 +95,7 @@ public class ButtonHandler{
         if(game.getActivePlayer().getHand().numOfCards() > getSliderValue()){
         game.handleBattle(stat);
         resetSlider();
-            System.out.println(game.getActivePlayer().getHand().numOfCards());
+        nextButton.setVisible(true);
         }
     };
     
@@ -90,7 +104,7 @@ public class ButtonHandler{
         if(game.getActivePlayer().getHand().numOfCards() > getSliderValue()){
         game.handleBattle(stat);
         resetSlider();
-            System.out.println(game.getActivePlayer().getHand().numOfCards());
+        nextButton.setVisible(true);
         }
     };
 
@@ -99,7 +113,7 @@ public class ButtonHandler{
         if(game.getActivePlayer().getHand().numOfCards() > getSliderValue()){
         game.handleBattle(stat);
         resetSlider();
-            System.out.println(game.getActivePlayer().getHand().numOfCards());
+        nextButton.setVisible(true);
         }
     };
 
@@ -108,13 +122,18 @@ public class ButtonHandler{
         if(game.getActivePlayer().getHand().numOfCards() > getSliderValue()){
         game.handleBattle(stat);
         resetSlider();
-            System.out.println(game.getActivePlayer().getHand().numOfCards());
+        nextButton.setVisible(true);
         }
     };
 
+    private EventHandler<MouseEvent> nextButtonHandler = e -> {
+        game.endRound();
+        nextButton.setVisible(false);
+    };
+
     private void initSlider() {
-        bidSlider.setLayoutX(800);
-        bidSlider.setLayoutY(700);
+        bidSlider.setLayoutX(300);
+        bidSlider.setLayoutY(300);
         bidSlider.setShowTickLabels(true);
         bidSlider.setShowTickMarks(true);
         bidSlider.setMajorTickUnit(1);

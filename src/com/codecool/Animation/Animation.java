@@ -25,21 +25,35 @@ public class Animation {
         }
             
         double targetX = destPile.getLayoutX();
-        double targetY = destPile.getLayoutY();
+        double targetY = destPile.getLayoutY() - destPile.numOfCards();
 
         System.out.println("Moved card " + cardToSlide + " X: " + targetX + " Y: " + targetY);
 
         double sourceX = cardToSlide.getLayoutX() + cardToSlide.getTranslateX();
         double sourceY = cardToSlide.getLayoutY() + cardToSlide.getTranslateY();
 
+
+        if(destPile.getPileType() == Pile.PileType.HAND){
+            cardToSlide.toBack();
+            destPile.toBack();
+            cardToSlide.flip();
+        }
+
         animateCardMovement(cardToSlide, sourceX, sourceY,
                 targetX, targetY, Duration.millis(1000),
                 e -> {
+                    cardToSlide.setLast();
                     cardToSlide.moveToPile(destPile);
-                    if(cardToSlide.isFaceDown()){
-                        cardToSlide.flip();
-                    }});
-    }
+
+                    
+                    if(destPile.getPileType() != Pile.PileType.HAND){
+                        cardToSlide.toFront();
+                        if(cardToSlide.isFaceDown()){
+                            cardToSlide.flip();
+                        }
+                    }
+                });
+                }
 
     private void animateCardMovement(
             Card card, double sourceX, double sourceY,
