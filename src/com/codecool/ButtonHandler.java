@@ -136,10 +136,6 @@ public class ButtonHandler{
     public void pushNext() {
         pushedNext();
     } 
-=======
-        }
-    };
->>>>>>> Development
 
     private EventHandler<MouseEvent> nextButtonHandler = e -> {
         game.endRound();
