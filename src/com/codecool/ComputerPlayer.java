@@ -10,14 +10,15 @@ public class ComputerPlayer extends Player{
         int firstStat = 0;
         int numOfStat = 4;
         int greatest = card.getStatistic(firstStat);
+        int toReturn = firstStat;
         int toCompare;
 
         for (int i = firstStat + 1; i < numOfStat; i++){
             toCompare = card.getStatistic(i);    
             if (toCompare > greatest) {
-                greatest = toCompare;
+                toReturn = i;
             }
         }
-        return greatest;
+        return toReturn;
     }
 }
