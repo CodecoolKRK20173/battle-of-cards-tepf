@@ -115,8 +115,20 @@ public class ButtonHandler{
 
     private EventHandler<MouseEvent> nextButtonHandler = e -> {
         game.endRound();
-        nextButton.setVisible(false);
+        if (game.winner instanceof ComputerPlayer) {
+            game.handleBattle(winner.aiMove());
+            setStatButtons(false);
+        } else {
+            setStatButtons(true);
+            nextButton.setVisible(false);
+        }
     };
+
+    private void setStatButtons(boolean isVisible) {
+        for (Button btn: buttonList) {
+            btn.setVisible(isVisible);
+        }
+    }
 
     private void initSlider() {
         bidSlider.setLayoutX(300);

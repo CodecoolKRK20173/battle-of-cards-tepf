@@ -1,7 +1,7 @@
 package com.codecool;
 
 public class ComputerPlayer extends Player{
-    public int AiMove() {
+    public int aiMove() {
         return greatestStat();
     }
 
