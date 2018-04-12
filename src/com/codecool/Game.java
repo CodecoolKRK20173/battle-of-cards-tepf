@@ -36,12 +36,13 @@ public class Game extends Pane {
     private Animation animationHandler = new Animation();
     private List<Player> players = new ArrayList<>();
     private List<Card> deck = new ArrayList<>();
+    private List<Card> battleCards = new ArrayList<>();
     private Pile wastePile;
     private double GAP = 1;
-
     private boolean isDraw = false;
     Player winner;
-    public Game(List<Player> players) {
+
+    public Game(List<Player> players){
         this.players = players;
         prepareGame();
     }
@@ -54,6 +55,7 @@ public class Game extends Pane {
         initPiles();
         dealCards();
         firstPlayer.activate();
+        firstPlayer.getHand().getTopCard().flip();
         setButtonsOnPlayer(firstPlayer);
     }
 
@@ -124,7 +126,7 @@ public class Game extends Pane {
         while(deckIterator.hasNext()){
             for(Pile destPile : playersPiles){
                 Card card = deckIterator.next();
-                addMouseEventHandlers(card);
+                // addMouseEventHandlers(card);
                 destPile.addCardOnTop(card);
                 getChildren().add(card);
                 if(!deckIterator.hasNext()){
@@ -135,49 +137,116 @@ public class Game extends Pane {
     }
 
     public void handleBattle(int statistic){
-        List<Card> cardsToCompare = getCardsToCompare();
-        List<Card> sortedCards = getSortedCardsByStatistic(statistic, cardsToCompare);
+        battleCards.clear();
+        battleCards = getCardsToCompare();
+        List<Card> sortedCards = getSortedCardsByStatistic(statistic, battleCards);
         int maxStatistic = sortedCards.get(0).getStatistic(statistic);
+        isDraw = checkBattleResult(sortedCards, statistic);
 
-        animateCardsMovement(cardsToCompare);
-
-        if(isDraw(sortedCards, statistic)){
+        if(isDraw){
             for(Card card : sortedCards){
                 if(card.getStatistic(statistic) < maxStatistic){
                     Player player = card.getContainingPile().getOwner();
                     player.setStatus(Player.Status.OUT);
                 }
-                // card.moveToPile(wastePile);
             }
         }
         else{
-            Player winner = sortedCards.get(0).getContainingPile().getOwner();
+            winner = sortedCards.get(0).getContainingPile().getOwner();
 
-            // moveWinnedCards(sortedCards, winner);
             restorePlayersToGame();
         }
+
+        animateCardsMovement(battleCards);
+    }
+
+    public void endRound(){
+        
+        gtfo();
 
         if(isGameOver()){
             System.out.println("Game ended");
         }
+
+        Player activePlayer = getActivePlayer();
+        if(isDraw){
+            moveCardsToWaste();
+            setFirstPlayer(activePlayer);
+        }
+        else if(!activePlayer.equals(winner)){
+            activePlayer.deactivate();
+            winner.activate();
+            setButtonsOnPlayer(winner);
+            winner.getHand().getTopCard().flip();
+        }
+        else{
+            if(winner.getHand().getTopCard() == null){
+                setFirstPlayer(activePlayer);
+            }
+            else{
+                winner.getHand().getTopCard().flip();
+            }
+        }
+        if(!isDraw){
+            moveWinnedCards();
+        }
     }
 
-    private void moveWinnedCards(List<Card> cards, Player winner){
-        for(Card card : cards){
-            card.moveToPile(winner.getHand());
+    private void setFirstPlayer(Player activePlayer){
+        for(Player player : players){
+            if(player.getStatus() == Player.Status.PLAYING){
+                activePlayer.deactivate();
+                player.activate();
+                setButtonsOnPlayer(player);
+                player.getHand().getTopCard().flip();
+                break;
+            }
+        }
+    }
+
+    private void gtfo(){
+        for(Player player : players){
+            if(player.getHand().isEmpty()){
+                player.setStatus(Player.Status.OUT);
+            }
+            System.out.println(player.getStatus());
+        }
+        winner.setStatus(Player.Status.PLAYING);
+    }
+
+    private void moveCardsToWaste(){
+        for(Pile tableauPile : tableauPiles){
+            Card card = tableauPile.getTopCard();
+            animationHandler.slideToDest(card, wastePile);
+        }
+    }
+
+    private Player getActivePlayer(){
+        for(Player player : players){
+            if(player.isActivePlayer()){
+                return player;
+            }
+        }
+
+        return null;
+    }
+
+    private void moveWinnedCards(){
+        Pile destPile = winner.getHand();
+
+        for(Card card : battleCards){
+            animationHandler.slideToDest(card, destPile);
         }
         if(!wastePile.isEmpty()){
             for(Card card : wastePile.getCards()){
-                card.moveToPile(winner.getHand());
+                animationHandler.slideToDest(card, destPile);
             }
         }
     }
 
     private void restorePlayersToGame(){
         for(Player player : players){
-            if(!player.getHand().isEmpty()){
-                player.setStatus(Player.Status.PLAYING);
-            }
+            player.setStatus(Player.Status.PLAYING);
         }
     }
 
@@ -190,7 +259,7 @@ public class Game extends Pane {
         }
     }
 
-    private boolean isDraw(List<Card> cards, int statistic){
+    private boolean checkBattleResult(List<Card> cards, int statistic){
         int firstElement = cards.get(0).getStatistic(statistic);
         int secondElement = cards.get(1).getStatistic(statistic);
 
@@ -211,8 +280,12 @@ public class Game extends Pane {
         
         for(Player player : players){
             if (player.getStatus().isPlaying()){
+                System.out.println(player.getStatus().isPlaying());
                 Card card = player.getHand().getTopCard();
-                cardsToCompare.add(card);
+                if(card != null){
+                    cardsToCompare.add(card);
+                }
+                
                 System.out.println("Card " + card + " added to cards to compare");
             }
         }
@@ -259,23 +332,7 @@ public class Game extends Pane {
 
         return lostPlayers;
     }
-
-    private void addMouseEventHandlers(Card card) {
-        card.setOnMouseClicked(onMouseClickedHandler);
-    }
-
-    private EventHandler<MouseEvent> onMouseClickedHandler = e -> {
-        Card card = (Card) e.getSource();
-        Pile containingPile = card.getContainingPile();
-        if (containingPile.getPileType().equals(Pile.PileType.HAND)){
-            Player owner = containingPile.getOwner();
-            if (owner.isActivePlayer() && card.isFaceDown()){
-                card.flip();
-                System.out.println(card + " revealed.");
-            }
-        }
-    };
-
+    
     public void setTableBackground(Image tableBackground) {
         setBackground(new Background(new BackgroundImage(tableBackground,
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,

@@ -80,7 +80,11 @@ public class Pile extends Pane {
         card.setTranslateX(0);
         card.setTranslateY(0);
         card.setLayoutX(getLayoutX());
-        card.setLayoutY(getLayoutY() + (cards.size() - 1) * cardGap);
+        if(card.isLast()){
+            card.setLayoutY(getLayoutY());
+        }else{
+            card.setLayoutY(getLayoutY() + (cards.size() - 1) * cardGap);
+        }
     }
 
     public Card getTopCard() {

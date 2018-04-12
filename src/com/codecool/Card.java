@@ -17,6 +17,7 @@ public class Card extends ImageView {
     private Image backFace;
     private Image frontFace;
     private Pile containingPile;
+    private boolean isOnBack;
     
     public Card(String name, Image backFace, Image frontFace, Status state, ArrayList<Integer> stats) {
         this.name = name;
@@ -37,6 +38,14 @@ public class Card extends ImageView {
                                         this.arm, this.hp));
 
         return statsArray.get(index);
+    }
+
+    public void setLast(){
+        this.isOnBack = true;
+    }
+
+    public boolean isLast(){
+        return this.isOnBack;
     }
 
     public Image getFrontFace() {

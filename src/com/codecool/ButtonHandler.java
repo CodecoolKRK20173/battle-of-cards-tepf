@@ -14,6 +14,7 @@ public class ButtonHandler{
     private Button dmgButton = new Button();
     private Button armButton = new Button();
     private Button hpButton = new Button();
+    private Button nextButton = new Button();
     private Slider bidSlider = new Slider(0.0, 3.0, 0.0);
 
     private ArrayList<Button> buttonList = new ArrayList<Button>(4);
@@ -58,6 +59,15 @@ public class ButtonHandler{
         hpButton.setOnMouseClicked(hpButtonHandler);
         buttonList.add(hpButton);
 
+        nextButton.setOnMouseClicked(nextButtonHandler);
+        setButtonSize(nextButton, 100, 100);
+        nextButton.setText("Next Round");
+        nextButton.setLayoutX(1100);
+        nextButton.setLayoutY(600);
+        nextButton.toFront();
+        nextButton.setVisible(false);
+        game.getChildren().add(nextButton);
+
         for (Button btn : buttonList) {
             setButtonSize(btn, 20, 20);
             makeButtonBorderGlow(btn);
@@ -78,21 +88,30 @@ public class ButtonHandler{
     private EventHandler<MouseEvent> spdButtonHandler = e -> {
         int stat = 0;
         game.handleBattle(stat);
+        nextButton.setVisible(true);
     };
     
     private EventHandler<MouseEvent> dmgButtonHandler = e -> {
         int stat = 1;
         game.handleBattle(stat);
+        nextButton.setVisible(true);
     };
 
     private EventHandler<MouseEvent> armButtonHandler = e -> {
         int stat = 2;
         game.handleBattle(stat);
+        nextButton.setVisible(true);
     };
 
     private EventHandler<MouseEvent> hpButtonHandler = e -> {
         int stat = 3;
         game.handleBattle(stat);
+        nextButton.setVisible(true);
+    };
+
+    private EventHandler<MouseEvent> nextButtonHandler = e -> {
+        game.endRound();
+        nextButton.setVisible(false);
     };
 
     private void initSlider() {

@@ -17,7 +17,7 @@ public class ImageHandler extends ImageView{
     public void loadFaceCardImages(){
         
         cardBackImage = new Image("/card_images/card_back.png");
-        int numberOfCards = 28;
+        int numberOfCards = 32;
         
         for (int i = 1; i <= numberOfCards; i++) {
             String imageFileName = "/card_images/tanks/" + i + ".jpeg";
