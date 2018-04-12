@@ -49,13 +49,20 @@ public class Game extends Pane {
 
     private void prepareGame(){
         Player firstPlayer = players.get(0);
-
+        if (firstPlayer instanceof ComputerPlayer) {
+            System.out.println("first player is ai");
+        }
         imageHandler.loadFaceCardImages();
         deck = createNewDeck();
         initPiles();
         dealCards();
+        winner = firstPlayer;
         firstPlayer.activate();
-        firstPlayer.getHand().getTopCard().flip();
+        if (firstPlayer instanceof ComputerPlayer) {
+            buttonHandler.pushNext();
+        } else {
+            firstPlayer.getHand().getTopCard().flip();
+        }
         setButtonsOnPlayer(firstPlayer);
     }
 

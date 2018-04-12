@@ -1,5 +1,7 @@
 package com.codecool;
 
+import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
@@ -62,7 +64,7 @@ public class ButtonHandler{
         hpButton.setOnMouseClicked(hpButtonHandler);
         hpButton.setStyle("-fx-background-color: transparent");
         buttonList.add(hpButton);
-
+        
         nextButton.setOnMouseClicked(nextButtonHandler);
         setButtonSize(nextButton, 100, 100);
         nextButton.setText("Next Round");
@@ -107,16 +109,26 @@ public class ButtonHandler{
         nextButton.setVisible(true);
     };
 
+
     private EventHandler<MouseEvent> hpButtonHandler = e -> {
+        pushedNext();
+    };
+
+    private void pushedNext() {
         int stat = 3;
         game.handleBattle(stat);
         nextButton.setVisible(true);
-    };
+    }
+
+    public void pushNext() {
+        pushedNext();
+    } 
 
     private EventHandler<MouseEvent> nextButtonHandler = e -> {
         game.endRound();
         if (game.winner instanceof ComputerPlayer) {
-            game.handleBattle(winner.aiMove());
+            int aiMove = ((ComputerPlayer)game.winner).aiMove();
+            game.handleBattle(aiMove);
             setStatButtons(false);
         } else {
             setStatButtons(true);
