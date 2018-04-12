@@ -35,28 +35,32 @@ public class ButtonHandler{
         btn.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
             @Override 
             public void handle(MouseEvent e) {
-                btn.setStyle("-fx-border-color: lime; -fx-background-color: transparent;");
+                btn.setStyle("-fx-border-color: lime; -fx-background-color: transparent; -fx-border-width: 3");
     }});
 
         btn.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
             @Override 
             public void handle(MouseEvent e) {
-                btn.setStyle("-fx-border-color: transparent; -fx-background-color: transparent;");
+                btn.setStyle("-fx-border-color: transparent; -fx-background-color: transparent; -fx-border-width: 3");
             }
     });
     }
 
     public void initButtons(){
         spdButton.setOnMouseClicked(spdButtonHandler);
+        spdButton.setStyle("-fx-background-color: transparent");
         buttonList.add(spdButton);
 
         dmgButton.setOnMouseClicked(dmgButtonHandler);
+        dmgButton.setStyle("-fx-background-color: transparent");
         buttonList.add(dmgButton);
 
         armButton.setOnMouseClicked(armButtonHandler);
+        armButton.setStyle("-fx-background-color: transparent");
         buttonList.add(armButton);
 
         hpButton.setOnMouseClicked(hpButtonHandler);
+        hpButton.setStyle("-fx-background-color: transparent");
         buttonList.add(hpButton);
 
         nextButton.setOnMouseClicked(nextButtonHandler);
@@ -69,7 +73,7 @@ public class ButtonHandler{
         game.getChildren().add(nextButton);
 
         for (Button btn : buttonList) {
-            setButtonSize(btn, 20, 20);
+            setButtonSize(btn, 25, 25);
             makeButtonBorderGlow(btn);
         }
 
@@ -115,8 +119,8 @@ public class ButtonHandler{
     };
 
     private void initSlider() {
-        bidSlider.setLayoutX(1200);
-        bidSlider.setLayoutY(800);
+        bidSlider.setLayoutX(300);
+        bidSlider.setLayoutY(300);
         bidSlider.setShowTickLabels(true);
         bidSlider.setShowTickMarks(true);
         bidSlider.setMajorTickUnit(1);

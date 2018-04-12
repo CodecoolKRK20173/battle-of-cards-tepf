@@ -296,7 +296,11 @@ public class Game extends Pane {
     private List<Card> getSortedCardsByStatistic(int stat, List<Card> cardsToCompare) {
         switch(stat) { 
             case 0:
+                System.out.println("Weszlo  ");
                 Collections.sort(cardsToCompare, new CardSortBySpd());
+                for (Card card: cardsToCompare) {
+                    System.out.println(card);
+                }
                 break;
             case 1:
                 Collections.sort(cardsToCompare, new CardSortByDmg());
