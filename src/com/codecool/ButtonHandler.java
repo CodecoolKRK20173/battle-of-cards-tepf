@@ -130,12 +130,15 @@ public class ButtonHandler{
         game.handleBattle(stat);
         resetSlider();
         nextButton.setVisible(true);
-<<<<<<< HEAD
     }
 
     public void pushNext() {
         pushedNext();
     } 
+=======
+        }
+    };
+>>>>>>> Development
 
     private EventHandler<MouseEvent> nextButtonHandler = e -> {
         game.endRound();
