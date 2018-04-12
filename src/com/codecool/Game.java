@@ -134,13 +134,12 @@ public class Game extends Pane {
 
     public void handleBattle(int statistic){
         List<Card> cardsToCompare = getCardsToCompare();
-        List<Card> sortedCards = getSortedCardsByStatistic(statistic, cardsToCompare);
-        int maxStatistic = sortedCards.get(0).getStatistic(statistic);
-
+        cardsToCompare = getSortedCardsByStatistic(statistic, cardsToCompare);
+        int maxStatistic = cardsToCompare.get(0).getStatistic(statistic);
         animateCardsMovement(cardsToCompare);
 
-        if(isDraw(sortedCards, statistic)){
-            for(Card card : sortedCards){
+        if(isDraw(cardsToCompare, statistic)){
+            for(Card card : cardsToCompare){
                 if(card.getStatistic(statistic) < maxStatistic){
                     Player player = card.getContainingPile().getOwner();
                     player.setStatus(Player.Status.OUT);
@@ -149,7 +148,7 @@ public class Game extends Pane {
             }
         }
         else{
-            Player winner = sortedCards.get(0).getContainingPile().getOwner();
+            Player winner = cardsToCompare.get(0).getContainingPile().getOwner();
 
             // moveWinnedCards(sortedCards, winner);
             restorePlayersToGame();
@@ -221,7 +220,11 @@ public class Game extends Pane {
     private List<Card> getSortedCardsByStatistic(int stat, List<Card> cardsToCompare) {
         switch(stat) { 
             case 0:
+                System.out.println("Weszlo  ");
                 Collections.sort(cardsToCompare, new CardSortBySpd());
+                for (Card card: cardsToCompare) {
+                    System.out.println(card);
+                }
                 break;
             case 1:
                 Collections.sort(cardsToCompare, new CardSortByDmg());
