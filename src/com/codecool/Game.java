@@ -152,7 +152,7 @@ public class Game extends Pane {
         List<Card> sortedCards = getSortedCardsByStatistic(statistic, battleCards);
         int maxStatistic = sortedCards.get(0).getStatistic(statistic);
         addBidCards();
-        animateCardsMovement(cardsToCompare);
+        animateCardsMovement(battleCards);
 
         isDraw = checkBattleResult(sortedCards, statistic);
 
@@ -185,7 +185,7 @@ public class Game extends Pane {
         if(isDraw){
             moveCardsToWaste();
             setFirstPlayer(activePlayer);
-            winner = activePlayer;
+            winner = getActivePlayer();
         }
         else if(!activePlayer.equals(winner)){
             activePlayer.deactivate();
