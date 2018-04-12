@@ -77,7 +77,7 @@ public class ButtonHandler{
 
     private EventHandler<MouseEvent> spdButtonHandler = e -> {
         int stat = 0;
-        if(game.getActivePlayer().getHand().numOfCards() >= getSliderValue()){
+        if(game.getActivePlayer().getHand().numOfCards() > getSliderValue()){
         game.handleBattle(stat);
             System.out.println(game.getActivePlayer().getHand().numOfCards());
         }
@@ -85,7 +85,7 @@ public class ButtonHandler{
     
     private EventHandler<MouseEvent> dmgButtonHandler = e -> {
         int stat = 1;
-        if(game.getActivePlayer().getHand().numOfCards() >= getSliderValue()){
+        if(game.getActivePlayer().getHand().numOfCards() > getSliderValue()){
         game.handleBattle(stat);
             System.out.println(game.getActivePlayer().getHand().numOfCards());
         }
@@ -93,7 +93,7 @@ public class ButtonHandler{
 
     private EventHandler<MouseEvent> armButtonHandler = e -> {
         int stat = 2;
-        if(game.getActivePlayer().getHand().numOfCards() >= getSliderValue()){
+        if(game.getActivePlayer().getHand().numOfCards() > getSliderValue()){
         game.handleBattle(stat);
             System.out.println(game.getActivePlayer().getHand().numOfCards());
         }
@@ -101,7 +101,7 @@ public class ButtonHandler{
 
     private EventHandler<MouseEvent> hpButtonHandler = e -> {
         int stat = 3;
-        if(game.getActivePlayer().getHand().numOfCards() >= getSliderValue()){
+        if(game.getActivePlayer().getHand().numOfCards() > getSliderValue()){
         game.handleBattle(stat);
             System.out.println(game.getActivePlayer().getHand().numOfCards());
         }
