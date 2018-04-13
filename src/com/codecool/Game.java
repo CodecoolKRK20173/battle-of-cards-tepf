@@ -38,7 +38,7 @@ public class Game extends Pane {
     private List<Card> deck = new ArrayList<>();
     private List<Card> battleCards = new ArrayList<>();
     private Pile wastePile;
-    private double GAP = 1;
+    private double GAP = 0;
     private boolean isDraw = false;
     Player winner;
 
@@ -317,7 +317,7 @@ public class Game extends Pane {
 
     private void setButtonsOnPlayer(Player player){
         int xShift = 15;
-        int yShift = player.getHand().getCards().size() + 110;
+        int yShift = player.getHand().getCards().size() + 100;
         
         int x = (int)player.getHand().getLayoutX() + xShift;
         int y = (int)player.getHand().getLayoutY() + yShift;
