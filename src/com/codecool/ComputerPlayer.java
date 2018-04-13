@@ -1,14 +1,29 @@
 package com.codecool;
 
 public class ComputerPlayer extends Player{
-    public int getMaxCardStat() {
-        Card card = this.getHand().getTopCard();
-        int[] statsArray = {card.getSpd(), card.getDmg(), card.getArm(), card.getHp()};
-        int maxStatIndex = 0;
+    public int aiMove() {
+        return greatestStat();
+    }
 
-        for(int i = 1; i < statsArray.length; i++) {
-            if(statsArray[i] > statsArray[maxStatIndex]) maxStatIndex = i;
+    private int greatestStat() {
+        Card card = this.getHand().getTopCard();
+        
+        if (card == null) {
+            return -1;
         }
-        return maxStatIndex;
+
+        int firstStat = 0;
+        int numOfStat = 4;
+        int greatest = card.getStatistic(firstStat);
+        int toReturn = firstStat;
+        int toCompare;
+
+        for (int i = firstStat + 1; i < numOfStat; i++){
+            toCompare = card.getStatistic(i);    
+            if (toCompare > greatest) {
+                toReturn = i;
+            }
+        }
+        return toReturn;
     }
 }

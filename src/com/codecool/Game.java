@@ -3,8 +3,10 @@ package com.codecool;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -19,10 +21,12 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 import com.codecool.Enums.*;
+// import com.sun.javafx.runtime.SystemProperties;
 import com.codecool.Comparators.*;
 import com.codecool.Animation.*;
 
@@ -32,13 +36,16 @@ public class Game extends Pane {
     private List<Pile> tableauPiles = FXCollections.observableArrayList();
     private List<Pile> playersPiles = FXCollections.observableArrayList();
     private ButtonHandler buttonHandler = new ButtonHandler(this);
+    private GameLog gameLog = new GameLog(this);
     private ImageHandler imageHandler = new ImageHandler();
     private Animation animationHandler = new Animation();
     private List<Player> players = new ArrayList<>();
     private List<Card> deck = new ArrayList<>();
     private List<Card> battleCards = new ArrayList<>();
     private Pile wastePile;
+    private Pile bidPile;
     private double GAP = 0;
+    private List<Card> cardsToMoveFromBids = new ArrayList<>();
     private boolean isDraw = false;
     Player winner;
 
@@ -47,17 +54,55 @@ public class Game extends Pane {
         prepareGame();
     }
 
+    private void endGame() {
+        this.getChildren().clear();
+        Label gameOverLabel = new Label();
+        Label winnerLabel = new Label();
+        Double middle = this.getWidth() / 2;
+
+        gameOverLabel.setText("Game Over");
+        gameOverLabel.setScaleX(10);
+        gameOverLabel.setScaleY(10);
+        
+        gameOverLabel.setLayoutX(middle);
+        gameOverLabel.setLayoutY(middle - 450);
+        
+        winnerLabel.setText("Player "  + findWinner() + " win");
+        winnerLabel.setScaleX(5);
+        winnerLabel.setScaleY(5);
+
+        winnerLabel.setLayoutX(middle);
+        winnerLabel.setLayoutY(middle - 250);
+
+        this.getChildren().addAll(gameOverLabel, winnerLabel);
+    }
+
+    private int findWinner() {
+        for (int i = 0; i < players.size(); i++) {
+            if (players.get(i).isActivePlayer()) {
+                return i + 1;
+            }
+        }
+        return 0;
+    }
+
     private void prepareGame(){
         Player firstPlayer = players.get(0);
+        if (firstPlayer instanceof ComputerPlayer) {
+            System.out.println("First player is ai");
+        }
         imageHandler.loadFaceCardImages();
         deck = createNewDeck();
         initPiles();
         dealCards();
+        winner = firstPlayer;
         firstPlayer.activate();
-        firstPlayer.getHand().getTopCard().flip();
         if (firstPlayer instanceof ComputerPlayer) {
-            handleBattleifCompPlayer(firstPlayer);
-        } else setButtonsOnPlayer(firstPlayer);
+            buttonHandler.pushNext();
+        } else {
+            firstPlayer.getHand().getTopCard().flip();
+        }
+        setButtonsOnPlayer(firstPlayer);
     }
 
     private List<Card> createNewDeck() {
@@ -89,15 +134,24 @@ public class Game extends Pane {
     private void initPiles() {
         initWastePile();
         initTableauPiles();
-        initPlayersPiles();       
+        initPlayersPiles();
+        initBidPile();    
     }
 
     private void initWastePile(){
         wastePile = new Pile(Pile.PileType.WASTE, "Waste", GAP);
         wastePile.setBlurredBackground();
-        wastePile.setLayoutX(95);
+        wastePile.setLayoutX(40);
         wastePile.setLayoutY(20);
         getChildren().add(wastePile);
+    }
+
+    private void initBidPile(){
+        bidPile = new Pile(Pile.PileType.BID, "Bid", GAP);
+        bidPile.setBlurredBackground();
+        bidPile.setLayoutX(220);
+        bidPile.setLayoutY(20);
+        getChildren().add(bidPile);
     }
 
     private void initTableauPiles(){
@@ -146,14 +200,31 @@ public class Game extends Pane {
     }
 
     public void handleBattle(int statistic){
+        System.out.println("------------");
+        for (Player player: players) {
+            System.out.println(player.getStatus());
+        }
+        System.out.println("------------");        
         battleCards.clear();
         battleCards = getCardsToCompare();
         List<Card> sortedCards = getSortedCardsByStatistic(statistic, battleCards);
         int maxStatistic = sortedCards.get(0).getStatistic(statistic);
-        isDraw = checkBattleResult(sortedCards, statistic);
+        if(buttonHandler.getSliderValue() > 0){
+            gameLog.bidLog((int)buttonHandler.getSliderValue());
+        }
+        gameLog.whichStatLog(statistic, maxStatistic);
+        addBidCards();
+        animateCardsMovement(battleCards);
+
+        if (sortedCards.size() > 1){
+            isDraw = checkBattleResult(sortedCards, statistic);
+        } else {
+            isDraw = false;
+        }
 
         if(isDraw){
             for(Card card : sortedCards){
+                System.out.println(card);
                 if(card.getStatistic(statistic) < maxStatistic){
                     Player player = card.getContainingPile().getOwner();
                     player.setStatus(Player.Status.OUT);
@@ -164,8 +235,6 @@ public class Game extends Pane {
             winner = sortedCards.get(0).getContainingPile().getOwner();
             restorePlayersToGame();
         }
-        animateCardsMovement(battleCards);
-        buttonHandler.getNextButton().setVisible(true);
     }
 
     public void endRound(){
@@ -173,23 +242,20 @@ public class Game extends Pane {
         gtfo();
 
         if(isGameOver()){
-            System.out.println("Game ended");
+            endGame();
         }
 
         Player activePlayer = getActivePlayer();
+
         if(isDraw){
             moveCardsToWaste();
             setFirstPlayer(activePlayer);
-        }
-
-        else if(!activePlayer.equals(winner)){
-            activePlayer.deactivate();
-            winner.activate();
-            winner.getHand().getTopCard().flip();
-            if(winner instanceof HumanPlayer) {
-                setButtonsOnPlayer(winner);
-            } else {
-                handleBattleifCompPlayer(winner);
+            winner = getActivePlayer();
+            if (winner.getHand().isEmpty()) {
+                winner.setStatus(Player.Status.OUT);
+                setFirstPlayer(winner);;
+                winner = getActivePlayer();
+                gameLog.battleDrawLog(players);
             }
         }
         else{
@@ -198,35 +264,26 @@ public class Game extends Pane {
             }
             else{
                 winner.getHand().getTopCard().flip();
-                if(winner instanceof ComputerPlayer) {
-                    handleBattleifCompPlayer(winner);
-                }
             }
-        }
-        if(!isDraw){
             moveWinnedCards();
+            gameLog.battleLog(players, winner);
         }
+        gameLog.newRoundLog(players);
     }
 
-    private void handleBattleifCompPlayer(Player player) {
-        System.out.println("Weszlo");
-        int maxStatIndex = ((ComputerPlayer)player).getMaxCardStat();
-        handleBattle(maxStatIndex);
-        buttonHandler.getNextButton().setVisible(true);  
-    }
-
-    private void setFirstPlayer(Player activePlayer){
+    public void setFirstPlayer(Player activePlayer){
         for(Player player : players){
-            if(player.getStatus() == Player.Status.PLAYING){
-                activePlayer.deactivate();
-                player.activate();
-                if(player instanceof HumanPlayer) {
+            if(player.getStatus() == Player.Status.PLAYING && !player.equals(activePlayer)){
+                Card card = player.getHand().getTopCard();
+                if (card != null) {
+                    card.flip();
+                    activePlayer.deactivate();
+                    player.activate();
                     setButtonsOnPlayer(player);
-                } else {
-                    handleBattleifCompPlayer(player);
+                    break;
                 }
-                player.getHand().getTopCard().flip();
-                break;
+            } else {
+                System.out.println("[no playing players with cards]");
             }
         }
     }
@@ -236,9 +293,11 @@ public class Game extends Pane {
             if(player.getHand().isEmpty()){
                 player.setStatus(Player.Status.OUT);
             }
-            System.out.println(player.getStatus());
+            // System.out.println(player.getStatus());
         }
-        winner.setStatus(Player.Status.PLAYING);
+        if(!isDraw){
+            winner.setStatus(Player.Status.PLAYING);
+        }
     }
 
     private void moveCardsToWaste(){
@@ -248,7 +307,7 @@ public class Game extends Pane {
         }
     }
 
-    private Player getActivePlayer(){
+    public Player getActivePlayer(){
         for(Player player : players){
             if(player.isActivePlayer()){
                 return player;
@@ -269,11 +328,17 @@ public class Game extends Pane {
                 animationHandler.slideToDest(card, destPile);
             }
         }
+        for (Card card : cardsToMoveFromBids) {
+            animationHandler.slideToDest(card, destPile);
+        }
+        cardsToMoveFromBids.clear();
     }
 
     private void restorePlayersToGame(){
         for(Player player : players){
-            player.setStatus(Player.Status.PLAYING);
+            if (!player.getHand().isEmpty()) {
+                player.setStatus(Player.Status.PLAYING);
+            }
         }
     }
 
@@ -282,7 +347,15 @@ public class Game extends Pane {
 
         for(Card card : cards){
             animationHandler.slideToDest(card, tableauPiles.get(index));
+            gameLog.moveCardLog(card, tableauPiles.get(index));
             index++;
+        }
+    }
+
+    private void animateCardsToBid(List<Card> cards){
+
+        for(Card card : cards){
+            animationHandler.slideToDest(card, bidPile);
         }
     }
 
@@ -293,7 +366,7 @@ public class Game extends Pane {
         return firstElement == secondElement;
     }
 
-    private boolean isGameOver() {
+    public boolean isGameOver() {
         
         if(getLostPlayersNumber() == players.size() - 1){
             return true;
@@ -307,10 +380,12 @@ public class Game extends Pane {
         
         for(Player player : players){
             if (player.getStatus().isPlaying()){
-                System.out.println(player.getStatus().isPlaying());
+                // System.out.println(player.getStatus().isPlaying());
                 Card card = player.getHand().getTopCard();
                 if(card != null){
                     cardsToCompare.add(card);
+                } else {
+                    player.setStatus(Player.Status.OUT);
                 }
                 
                 System.out.println("Card " + card + " added to cards to compare");
@@ -341,9 +416,9 @@ public class Game extends Pane {
         return cardsToCompare;
     }
 
-    private void setButtonsOnPlayer(Player player){
+    public void setButtonsOnPlayer(Player player){
         int xShift = 15;
-        int yShift = player.getHand().getCards().size() + 110;
+        int yShift = player.getHand().getCards().size() + 98;
         
         int x = (int)player.getHand().getLayoutX() + xShift;
         int y = (int)player.getHand().getLayoutY() + yShift;
@@ -367,5 +442,25 @@ public class Game extends Pane {
         setBackground(new Background(new BackgroundImage(tableBackground,
                 BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT,
                 BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+    }
+
+    private void addBidCards(){
+        int numberOfBidCards = (int) buttonHandler.getSliderValue();
+        int playerNumCards;
+        for (Player player : players) {
+            playerNumCards = player.getHand().numOfCards();
+            int numberOfCardsPut = 0;
+            if(player.getStatus().isPlaying() && playerNumCards > 1){
+                for(int j = 2; j <= playerNumCards; j++) {
+                    if(numberOfCardsPut == numberOfBidCards){
+                        break;
+                    } else if(!cardsToMoveFromBids.contains(player.getHand().getCardAt(playerNumCards - j))){
+                        numberOfCardsPut++;    
+                        cardsToMoveFromBids.add(player.getHand().getCardAt(playerNumCards - j));
+                        animationHandler.slideToDest(player.getHand().getCardAt(playerNumCards - j), bidPile);
+                    } 
+                }
+            }
+        }
     }
 }

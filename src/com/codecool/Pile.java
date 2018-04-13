@@ -88,10 +88,15 @@ public class Pile extends Pane {
     }
 
     public Card getTopCard() {
-        if (cards.isEmpty())
+        return getCardAt(cards.size() - 1);
+    }
+
+    public Card getCardAt(int index){
+        if (cards.isEmpty()){
             return null;
-        else
-            return cards.get(cards.size() - 1);
+        } else {
+            return cards.get(index);
+        }
     }
 
     public void setBlurredBackground() {
@@ -106,6 +111,7 @@ public class Pile extends Pane {
     public enum PileType {
         HAND,
         TABLEAU,
-        WASTE
+        WASTE,
+        BID
     }
 }
