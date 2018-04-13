@@ -147,6 +147,11 @@ public class Game extends Pane {
     }
 
     public void handleBattle(int statistic){
+        System.out.println("------------");
+        for (Player player: players) {
+            System.out.println(player.getStatus());
+        }
+        System.out.println("------------");        
         battleCards.clear();
         battleCards = getCardsToCompare();
         List<Card> sortedCards = getSortedCardsByStatistic(statistic, battleCards);
@@ -154,7 +159,11 @@ public class Game extends Pane {
         addBidCards();
         animateCardsMovement(battleCards);
 
-        isDraw = checkBattleResult(sortedCards, statistic);
+        if (sortedCards.size() > 1){
+            isDraw = checkBattleResult(sortedCards, statistic);
+        } else {
+            isDraw = false;
+        }
 
         if(isDraw){
             for(Card card : sortedCards){
@@ -182,16 +191,16 @@ public class Game extends Pane {
         }
 
         Player activePlayer = getActivePlayer();
+
         if(isDraw){
             moveCardsToWaste();
             setFirstPlayer(activePlayer);
             winner = getActivePlayer();
-        }
-        else if(!activePlayer.equals(winner)){
-            activePlayer.deactivate();
-            winner.activate();
-            setButtonsOnPlayer(winner);
-            winner.getHand().getTopCard().flip();
+            if (winner.getHand().isEmpty()) {
+                winner.setStatus(Player.Status.OUT);
+                setFirstPlayer(winner);;
+                winner = getActivePlayer();
+            }
         }
         else{
             if(winner.getHand().getTopCard() == null){
@@ -200,20 +209,23 @@ public class Game extends Pane {
             else{
                 winner.getHand().getTopCard().flip();
             }
-        }
-        if(!isDraw){
             moveWinnedCards();
         }
     }
 
-    private void setFirstPlayer(Player activePlayer){
+    public void setFirstPlayer(Player activePlayer){
         for(Player player : players){
             if(player.getStatus() == Player.Status.PLAYING && !player.equals(activePlayer)){
-                activePlayer.deactivate();
-                player.activate();
-                setButtonsOnPlayer(player);
-                player.getHand().getTopCard().flip();
-                break;
+                Card card = player.getHand().getTopCard();
+                if (card != null) {
+                    card.flip();
+                    activePlayer.deactivate();
+                    player.activate();
+                    setButtonsOnPlayer(player);
+                    break;
+                }
+            } else {
+                System.out.println("[no playing players with cards]");
             }
         }
     }
@@ -264,7 +276,9 @@ public class Game extends Pane {
 
     private void restorePlayersToGame(){
         for(Player player : players){
-            player.setStatus(Player.Status.PLAYING);
+            if (!player.getHand().isEmpty()) {
+                player.setStatus(Player.Status.PLAYING);
+            }
         }
     }
 
@@ -284,7 +298,7 @@ public class Game extends Pane {
         return firstElement == secondElement;
     }
 
-    private boolean isGameOver() {
+    public boolean isGameOver() {
         
         if(getLostPlayersNumber() == players.size() - 1){
             return true;
@@ -298,10 +312,12 @@ public class Game extends Pane {
         
         for(Player player : players){
             if (player.getStatus().isPlaying()){
-                System.out.println(player.getStatus().isPlaying());
+                // System.out.println(player.getStatus().isPlaying());
                 Card card = player.getHand().getTopCard();
                 if(card != null){
                     cardsToCompare.add(card);
+                } else {
+                    player.setStatus(Player.Status.OUT);
                 }
                 
                 System.out.println("Card " + card + " added to cards to compare");
@@ -333,7 +349,7 @@ public class Game extends Pane {
         return cardsToCompare;
     }
 
-    private void setButtonsOnPlayer(Player player){
+    public void setButtonsOnPlayer(Player player){
         int xShift = 15;
         int yShift = player.getHand().getCards().size() + 110;
         

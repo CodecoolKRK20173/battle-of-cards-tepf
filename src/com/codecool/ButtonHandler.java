@@ -139,9 +139,15 @@ public class ButtonHandler{
         game.endRound();
         if (game.winner instanceof ComputerPlayer) {
             int aiMove = ((ComputerPlayer)game.winner).aiMove();
-            game.handleBattle(aiMove);
-            setStatButtons(false);
+            if (aiMove == -1) {
+                game.winner.setStatus(Player.Status.OUT);
+                game.setFirstPlayer(game.winner);
+            } else {
+                game.handleBattle(aiMove);
+                setStatButtons(false);
+            }
         } else {
+            game.setButtonsOnPlayer(game.winner);
             setStatButtons(true);
             nextButton.setVisible(false);
         }

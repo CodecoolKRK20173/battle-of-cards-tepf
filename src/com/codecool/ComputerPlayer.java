@@ -7,6 +7,11 @@ public class ComputerPlayer extends Player{
 
     private int greatestStat() {
         Card card = this.getHand().getTopCard();
+        
+        if (card == null) {
+            return -1;
+        }
+
         int firstStat = 0;
         int numOfStat = 4;
         int greatest = card.getStatistic(firstStat);
