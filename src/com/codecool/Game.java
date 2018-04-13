@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 import com.codecool.Enums.*;
+import com.sun.javafx.runtime.SystemProperties;
 import com.codecool.Comparators.*;
 import com.codecool.Animation.*;
 
@@ -40,6 +41,7 @@ public class Game extends Pane {
     private List<Card> deck = new ArrayList<>();
     private List<Card> battleCards = new ArrayList<>();
     private Pile wastePile;
+    private Pile bidPile;
     private double GAP = 1;
     private List<Card> cardsToMoveFromBids = new ArrayList<>();
     private boolean isDraw = false;
@@ -90,15 +92,24 @@ public class Game extends Pane {
     private void initPiles() {
         initWastePile();
         initTableauPiles();
-        initPlayersPiles();       
+        initPlayersPiles();
+        initBidPile();    
     }
 
     private void initWastePile(){
         wastePile = new Pile(Pile.PileType.WASTE, "Waste", GAP);
         wastePile.setBlurredBackground();
-        wastePile.setLayoutX(95);
+        wastePile.setLayoutX(40);
         wastePile.setLayoutY(20);
         getChildren().add(wastePile);
+    }
+
+    private void initBidPile(){
+        bidPile = new Pile(Pile.PileType.BID, "Bid", GAP);
+        bidPile.setBlurredBackground();
+        bidPile.setLayoutX(220);
+        bidPile.setLayoutY(20);
+        getChildren().add(bidPile);
     }
 
     private void initTableauPiles(){
@@ -157,7 +168,9 @@ public class Game extends Pane {
         isDraw = checkBattleResult(sortedCards, statistic);
 
         if(isDraw){
+            System.out.println(cardsToMoveFromBids);
             for(Card card : sortedCards){
+                System.out.println(card);
                 if(card.getStatistic(statistic) < maxStatistic){
                     Player player = card.getContainingPile().getOwner();
                     player.setStatus(Player.Status.OUT);
@@ -169,8 +182,7 @@ public class Game extends Pane {
 
             restorePlayersToGame();
         }
-
-        animateCardsMovement(battleCards);
+        // animateCardsMovement(battleCards);
     }
 
     public void endRound(){
@@ -225,7 +237,9 @@ public class Game extends Pane {
             }
             // System.out.println(player.getStatus());
         }
-        winner.setStatus(Player.Status.PLAYING);
+        if(!isDraw){
+            winner.setStatus(Player.Status.PLAYING);
+        }
     }
 
     private void moveCardsToWaste(){
@@ -257,7 +271,7 @@ public class Game extends Pane {
             }
         }
         for (Card card : cardsToMoveFromBids) {
-            card.moveToPile(winner.getHand());
+            animationHandler.slideToDest(card, destPile);
         }
         cardsToMoveFromBids.clear();
     }
@@ -274,6 +288,13 @@ public class Game extends Pane {
         for(Card card : cards){
             animationHandler.slideToDest(card, tableauPiles.get(index));
             index++;
+        }
+    }
+
+    private void animateCardsToBid(List<Card> cards){
+
+        for(Card card : cards){
+            animationHandler.slideToDest(card, bidPile);
         }
     }
 
@@ -363,14 +384,23 @@ public class Game extends Pane {
 
     private void addBidCards(){
         int numberOfBidCards = (int) buttonHandler.getSliderValue();
-
+        System.out.println("num bid"+ numberOfBidCards);
+        int playerNumCards;
         for (Player player : players) {
-            if(player.getStatus().isPlaying()){
-                for(int i = 1; i < numberOfBidCards + 1; i++){
-                    if(player.getHand().numOfCards() > i){
-                        cardsToMoveFromBids.add(player.getHand().getCardAt(i));
-                    }
+            playerNumCards = player.getHand().numOfCards();
+            int numberOfCardsPut = 0;
+            if(player.getStatus().isPlaying() && playerNumCards > 1){
+                System.out.println("has before:" + playerNumCards);
+                for(int j = 2; j <= playerNumCards; j++) {
+                    if(numberOfCardsPut == numberOfBidCards){
+                        break;
+                    } else if(!cardsToMoveFromBids.contains(player.getHand().getCardAt(playerNumCards - j))){
+                        numberOfCardsPut++;    
+                        cardsToMoveFromBids.add(player.getHand().getCardAt(playerNumCards - j));
+                        animationHandler.slideToDest(player.getHand().getCardAt(playerNumCards - j), bidPile);
+                    } 
                 }
+                System.out.println("has after:" + playerNumCards);
             }
         }
     }
