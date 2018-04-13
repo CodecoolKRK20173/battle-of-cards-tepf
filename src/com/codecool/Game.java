@@ -162,13 +162,13 @@ public class Game extends Pane {
         battleCards = getCardsToCompare();
         List<Card> sortedCards = getSortedCardsByStatistic(statistic, battleCards);
         int maxStatistic = sortedCards.get(0).getStatistic(statistic);
+        gameLog.whichStatLog(statistic, maxStatistic);
         addBidCards();
         animateCardsMovement(battleCards);
 
         isDraw = checkBattleResult(sortedCards, statistic);
 
         if(isDraw){
-            System.out.println(cardsToMoveFromBids);
             for(Card card : sortedCards){
                 System.out.println(card);
                 if(card.getStatistic(statistic) < maxStatistic){
@@ -179,7 +179,6 @@ public class Game extends Pane {
         }
         else{
             winner = sortedCards.get(0).getContainingPile().getOwner();
-
             restorePlayersToGame();
         }
         // animateCardsMovement(battleCards);
@@ -198,6 +197,7 @@ public class Game extends Pane {
             moveCardsToWaste();
             setFirstPlayer(activePlayer);
             winner = getActivePlayer();
+            gameLog.battleDrawLog(players);
         }
         else if(!activePlayer.equals(winner)){
             activePlayer.deactivate();
@@ -215,7 +215,9 @@ public class Game extends Pane {
         }
         if(!isDraw){
             moveWinnedCards();
+            gameLog.battleLog(players, winner);
         }
+        gameLog.newRoundLog(players);
     }
 
     private void setFirstPlayer(Player activePlayer){
@@ -287,6 +289,7 @@ public class Game extends Pane {
 
         for(Card card : cards){
             animationHandler.slideToDest(card, tableauPiles.get(index));
+            gameLog.moveCardLog(card, tableauPiles.get(index));
             index++;
         }
     }
