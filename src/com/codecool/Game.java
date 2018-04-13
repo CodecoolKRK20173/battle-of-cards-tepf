@@ -3,8 +3,10 @@ package com.codecool;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -50,6 +52,38 @@ public class Game extends Pane {
     public Game(List<Player> players){
         this.players = players;
         prepareGame();
+    }
+
+    private void endGame() {
+        this.getChildren().clear();
+        Label gameOverLabel = new Label();
+        Label winnerLabel = new Label();
+        Double middle = this.getWidth() / 2;
+
+        gameOverLabel.setText("Game Over");
+        gameOverLabel.setScaleX(10);
+        gameOverLabel.setScaleY(10);
+        
+        gameOverLabel.setLayoutX(middle);
+        gameOverLabel.setLayoutY(middle - 450);
+        
+        winnerLabel.setText("Player "  + findWinner() + " win");
+        winnerLabel.setScaleX(5);
+        winnerLabel.setScaleY(5);
+
+        winnerLabel.setLayoutX(middle);
+        winnerLabel.setLayoutY(middle - 250);
+
+        this.getChildren().addAll(gameOverLabel, winnerLabel);
+    }
+
+    private int findWinner() {
+        for (int i = 0; i < players.size(); i++) {
+            if (players.get(i).isActivePlayer()) {
+                return i + 1;
+            }
+        }
+        return 0;
     }
 
     private void prepareGame(){
@@ -200,7 +234,7 @@ public class Game extends Pane {
         gtfo();
 
         if(isGameOver()){
-            System.out.println("Game ended");
+            endGame();
         }
 
         Player activePlayer = getActivePlayer();
