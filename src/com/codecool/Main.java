@@ -44,7 +44,7 @@ public class Main extends Application{
         Button startButton = createNewButton("Start game", 500, 450);
 
         startButton.setOnAction(e -> {
-
+            //TODO
             for (ChoiceBox choiceBox : choiceBoxes){                
                 if(choiceBox.getValue() != null){
                     if(choiceBox.getValue().equals("Human player")){
@@ -67,19 +67,20 @@ public class Main extends Application{
             }
         });
 
-        menu.setBackground(new Image("/table/green.png"));
+        menu.setBackground(new Image("/table/wallpaper.png"));
         menu.getChildren().add(startButton);
         menu.getChildren().addAll(choiceBoxes);
         
         stage.setTitle("Game Options");
         stage.setScene(new Scene(menu, WINDOW_WIDTH, WINDOW_HEIGHT));
-        stage.show();    
+        stage.show();
+            
     }
 
-    private Scene getGameScene(){
+   private Scene getGameScene(){
 
         Game game = new Game(players);
-        game.setTableBackground(new Image("/table/green.png"));
+        game.setTableBackground(new Image("/table/rudy102.jpg"));
 
         return new Scene(game, WINDOW_WIDTH, WINDOW_HEIGHT);
     }

@@ -114,8 +114,8 @@ public class ButtonHandler{
     };
 
     private EventHandler<MouseEvent> nextButtonHandler = e -> {
-        game.endRound();
         nextButton.setVisible(false);
+        game.endRound();
     };
 
     private void initSlider() {
@@ -141,5 +141,9 @@ public class ButtonHandler{
 
     public double getSliderValue(){
         return bidSlider.getValue();
+    }
+
+    public Button getNextButton() {
+        return this.nextButton;
     }
 }

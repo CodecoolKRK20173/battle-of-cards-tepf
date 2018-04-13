@@ -38,7 +38,7 @@ public class Game extends Pane {
     private List<Card> deck = new ArrayList<>();
     private List<Card> battleCards = new ArrayList<>();
     private Pile wastePile;
-    private double GAP = 1;
+    private double GAP = 0;
     private boolean isDraw = false;
     Player winner;
 
@@ -49,14 +49,15 @@ public class Game extends Pane {
 
     private void prepareGame(){
         Player firstPlayer = players.get(0);
-
         imageHandler.loadFaceCardImages();
         deck = createNewDeck();
         initPiles();
         dealCards();
         firstPlayer.activate();
         firstPlayer.getHand().getTopCard().flip();
-        setButtonsOnPlayer(firstPlayer);
+        if (firstPlayer instanceof ComputerPlayer) {
+            handleBattleifCompPlayer(firstPlayer);
+        } else setButtonsOnPlayer(firstPlayer);
     }
 
     private List<Card> createNewDeck() {
@@ -75,6 +76,14 @@ public class Game extends Pane {
         Collections.shuffle(result);
 
         return result;
+    }
+
+    private void sleep(int miliseconds) {
+        try {
+            Thread.sleep(miliseconds);
+        }catch(InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initPiles() {
@@ -148,16 +157,15 @@ public class Game extends Pane {
                 if(card.getStatistic(statistic) < maxStatistic){
                     Player player = card.getContainingPile().getOwner();
                     player.setStatus(Player.Status.OUT);
-                }
+                } 
             }
         }
         else{
             winner = sortedCards.get(0).getContainingPile().getOwner();
-
             restorePlayersToGame();
         }
-
         animateCardsMovement(battleCards);
+        buttonHandler.getNextButton().setVisible(true);
     }
 
     public void endRound(){
@@ -173,11 +181,16 @@ public class Game extends Pane {
             moveCardsToWaste();
             setFirstPlayer(activePlayer);
         }
+
         else if(!activePlayer.equals(winner)){
             activePlayer.deactivate();
             winner.activate();
-            setButtonsOnPlayer(winner);
             winner.getHand().getTopCard().flip();
+            if(winner instanceof HumanPlayer) {
+                setButtonsOnPlayer(winner);
+            } else {
+                handleBattleifCompPlayer(winner);
+            }
         }
         else{
             if(winner.getHand().getTopCard() == null){
@@ -185,6 +198,9 @@ public class Game extends Pane {
             }
             else{
                 winner.getHand().getTopCard().flip();
+                if(winner instanceof ComputerPlayer) {
+                    handleBattleifCompPlayer(winner);
+                }
             }
         }
         if(!isDraw){
@@ -192,12 +208,23 @@ public class Game extends Pane {
         }
     }
 
+    private void handleBattleifCompPlayer(Player player) {
+        System.out.println("Weszlo");
+        int maxStatIndex = ((ComputerPlayer)player).getMaxCardStat();
+        handleBattle(maxStatIndex);
+        buttonHandler.getNextButton().setVisible(true);  
+    }
+
     private void setFirstPlayer(Player activePlayer){
         for(Player player : players){
             if(player.getStatus() == Player.Status.PLAYING){
                 activePlayer.deactivate();
                 player.activate();
-                setButtonsOnPlayer(player);
+                if(player instanceof HumanPlayer) {
+                    setButtonsOnPlayer(player);
+                } else {
+                    handleBattleifCompPlayer(player);
+                }
                 player.getHand().getTopCard().flip();
                 break;
             }
@@ -296,7 +323,6 @@ public class Game extends Pane {
     private List<Card> getSortedCardsByStatistic(int stat, List<Card> cardsToCompare) {
         switch(stat) { 
             case 0:
-                System.out.println("Weszlo  ");
                 Collections.sort(cardsToCompare, new CardSortBySpd());
                 for (Card card: cardsToCompare) {
                     System.out.println(card);
