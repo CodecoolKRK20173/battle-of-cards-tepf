@@ -1,7 +1,10 @@
 package com.codecool;
 
+import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.scene.control.Slider;
@@ -62,7 +65,7 @@ public class ButtonHandler{
         hpButton.setOnMouseClicked(hpButtonHandler);
         hpButton.setStyle("-fx-background-color: transparent");
         buttonList.add(hpButton);
-
+        
         nextButton.setOnMouseClicked(nextButtonHandler);
         setButtonSize(nextButton, 100, 100);
         nextButton.setText("Next Round");
@@ -91,50 +94,115 @@ public class ButtonHandler{
 
     private EventHandler<MouseEvent> spdButtonHandler = e -> {
         int stat = 0;
+        if(game.getActivePlayer().getHand().numOfCards() > getSliderValue()){
         game.handleBattle(stat);
+        resetSlider();
         nextButton.setVisible(true);
+        }
     };
     
     private EventHandler<MouseEvent> dmgButtonHandler = e -> {
         int stat = 1;
+        if(game.getActivePlayer().getHand().numOfCards() > getSliderValue()){
         game.handleBattle(stat);
+        resetSlider();
         nextButton.setVisible(true);
+        }
     };
 
     private EventHandler<MouseEvent> armButtonHandler = e -> {
         int stat = 2;
+        if(game.getActivePlayer().getHand().numOfCards() > getSliderValue()){
         game.handleBattle(stat);
+        resetSlider();
         nextButton.setVisible(true);
+        }
     };
 
+
     private EventHandler<MouseEvent> hpButtonHandler = e -> {
+        pushedNext();
+    };
+
+    private void pushedNext() {
         int stat = 3;
         game.handleBattle(stat);
+        resetSlider();
         nextButton.setVisible(true);
-    };
+    }
+
+    public void pushNext() {
+        pushedNext();
+    } 
 
     private EventHandler<MouseEvent> nextButtonHandler = e -> {
         game.endRound();
-        nextButton.setVisible(false);
+        if (game.winner instanceof ComputerPlayer) {
+            int aiMove = ((ComputerPlayer)game.winner).aiMove();
+            if (aiMove == -1) {
+                game.winner.setStatus(Player.Status.OUT);
+                game.setFirstPlayer(game.winner);
+            } else {
+                game.handleBattle(aiMove);
+                setStatButtons(false);
+            }
+        } else {
+            game.setButtonsOnPlayer(game.winner);
+            setStatButtons(true);
+            nextButton.setVisible(false);
+        }
     };
 
+    private void setStatButtons(boolean isVisible) {
+        for (Button btn: buttonList) {
+            btn.setVisible(isVisible);
+        }
+    }
+
     private void initSlider() {
-        bidSlider.setLayoutX(300);
-        bidSlider.setLayoutY(300);
+        bidSlider.setLayoutX(800);
+        bidSlider.setLayoutY(700);
         bidSlider.setShowTickLabels(true);
         bidSlider.setShowTickMarks(true);
         bidSlider.setMajorTickUnit(1);
         bidSlider.setMinorTickCount(0);
         bidSlider.setSnapToTicks(true);
-    
+        bidSlider.setStyle("-fx-base:black;");
+        bidSlider.setBlockIncrement(1);
+        bidSlider.setOnKeyPressed(setSceneToHandle);
+
         Text sliderDescript = new Text("Bid");
-        sliderDescript.setLayoutX(1200);
-        sliderDescript.setLayoutY(780);
-    
-        game.getChildren().add(bidSlider);
-        game.getChildren().add(sliderDescript);
+        sliderDescript.setLayoutX(810);
+        sliderDescript.setLayoutY(690);
+        sliderDescript.setStyle("-fx-font-size: 16; -fx-color: black;");
+        game.getChildren().addAll(bidSlider, sliderDescript);
     }
-    
+
+    private EventHandler<KeyEvent> keyPressedHandler = e -> {
+        switch(e.getText()){
+            case "0":
+                resetSlider();
+                break;
+            case "1":
+                bidSlider.adjustValue(1);
+                break;
+            case "2":
+                bidSlider.adjustValue(2);
+                break;
+            case "3":
+                bidSlider.adjustValue(3);
+                break;
+        }
+    };
+
+    public void setSceneToHandleKey(){
+        game.getScene().setOnKeyPressed(keyPressedHandler);
+    }
+
+    private EventHandler<KeyEvent> setSceneToHandle = e -> {
+        setSceneToHandleKey();
+    };
+
     public void resetSlider() {
         bidSlider.adjustValue(0);
     }
