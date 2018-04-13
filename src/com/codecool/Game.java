@@ -55,7 +55,7 @@ public class Game extends Pane {
     private void prepareGame(){
         Player firstPlayer = players.get(0);
         if (firstPlayer instanceof ComputerPlayer) {
-            System.out.println("first player is ai");
+            System.out.println("First player is ai");
         }
         imageHandler.loadFaceCardImages();
         deck = createNewDeck();
@@ -167,6 +167,10 @@ public class Game extends Pane {
         battleCards = getCardsToCompare();
         List<Card> sortedCards = getSortedCardsByStatistic(statistic, battleCards);
         int maxStatistic = sortedCards.get(0).getStatistic(statistic);
+        if(buttonHandler.getSliderValue() > 0){
+            gameLog.bidLog((int)buttonHandler.getSliderValue());
+        }
+        gameLog.whichStatLog(statistic, maxStatistic);
         addBidCards();
         animateCardsMovement(battleCards);
 
@@ -177,7 +181,6 @@ public class Game extends Pane {
         }
 
         if(isDraw){
-            System.out.println(cardsToMoveFromBids);
             for(Card card : sortedCards){
                 System.out.println(card);
                 if(card.getStatistic(statistic) < maxStatistic){
@@ -188,10 +191,8 @@ public class Game extends Pane {
         }
         else{
             winner = sortedCards.get(0).getContainingPile().getOwner();
-
             restorePlayersToGame();
         }
-        // animateCardsMovement(battleCards);
     }
 
     public void endRound(){
@@ -212,6 +213,7 @@ public class Game extends Pane {
                 winner.setStatus(Player.Status.OUT);
                 setFirstPlayer(winner);;
                 winner = getActivePlayer();
+                gameLog.battleDrawLog(players);
             }
         }
         else{
@@ -222,7 +224,9 @@ public class Game extends Pane {
                 winner.getHand().getTopCard().flip();
             }
             moveWinnedCards();
+            gameLog.battleLog(players, winner);
         }
+        gameLog.newRoundLog(players);
     }
 
     public void setFirstPlayer(Player activePlayer){
@@ -301,6 +305,7 @@ public class Game extends Pane {
 
         for(Card card : cards){
             animationHandler.slideToDest(card, tableauPiles.get(index));
+            gameLog.moveCardLog(card, tableauPiles.get(index));
             index++;
         }
     }
@@ -351,7 +356,6 @@ public class Game extends Pane {
     private List<Card> getSortedCardsByStatistic(int stat, List<Card> cardsToCompare) {
         switch(stat) { 
             case 0:
-                System.out.println("Weszlo  ");
                 Collections.sort(cardsToCompare, new CardSortBySpd());
                 for (Card card: cardsToCompare) {
                     System.out.println(card);
@@ -400,13 +404,11 @@ public class Game extends Pane {
 
     private void addBidCards(){
         int numberOfBidCards = (int) buttonHandler.getSliderValue();
-        System.out.println("num bid"+ numberOfBidCards);
         int playerNumCards;
         for (Player player : players) {
             playerNumCards = player.getHand().numOfCards();
             int numberOfCardsPut = 0;
             if(player.getStatus().isPlaying() && playerNumCards > 1){
-                System.out.println("has before:" + playerNumCards);
                 for(int j = 2; j <= playerNumCards; j++) {
                     if(numberOfCardsPut == numberOfBidCards){
                         break;
@@ -416,7 +418,6 @@ public class Game extends Pane {
                         animationHandler.slideToDest(player.getHand().getCardAt(playerNumCards - j), bidPile);
                     } 
                 }
-                System.out.println("has after:" + playerNumCards);
             }
         }
     }
