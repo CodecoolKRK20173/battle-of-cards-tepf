@@ -111,6 +111,7 @@ public class Pile extends Pane {
     public enum PileType {
         HAND,
         TABLEAU,
-        WASTE
+        WASTE,
+        BID
     }
 }

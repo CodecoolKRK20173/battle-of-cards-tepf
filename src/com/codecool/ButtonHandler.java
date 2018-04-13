@@ -160,8 +160,8 @@ public class ButtonHandler{
     }
 
     private void initSlider() {
-        bidSlider.setLayoutX(300);
-        bidSlider.setLayoutY(300);
+        bidSlider.setLayoutX(800);
+        bidSlider.setLayoutY(700);
         bidSlider.setShowTickLabels(true);
         bidSlider.setShowTickMarks(true);
         bidSlider.setMajorTickUnit(1);
