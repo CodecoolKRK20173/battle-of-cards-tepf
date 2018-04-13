@@ -113,12 +113,16 @@ public class GameLog{
                 statName = "(4) HP ";
                 break;
         }
-        addToLog("Player has chosen " + statName + "and current best stat is: " + maxStat);
+        addToLog("Current best stat is: " + maxStat +"\nPlayer has chosen " + statName);
     }
 
     public void clearLog(){
         if(sb.length() > 500){
             sb.delete(500, sb.length() - 1);
         }
+    }
+
+    public void bidLog(int sliderValue){
+        addToLog("Someone feels lucky today!\nBidding for " + sliderValue);
     }
 }

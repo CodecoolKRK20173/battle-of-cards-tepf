@@ -162,6 +162,9 @@ public class Game extends Pane {
         battleCards = getCardsToCompare();
         List<Card> sortedCards = getSortedCardsByStatistic(statistic, battleCards);
         int maxStatistic = sortedCards.get(0).getStatistic(statistic);
+        if(buttonHandler.getSliderValue() > 0){
+            gameLog.bidLog((int)buttonHandler.getSliderValue());
+        }
         gameLog.whichStatLog(statistic, maxStatistic);
         addBidCards();
         animateCardsMovement(battleCards);
